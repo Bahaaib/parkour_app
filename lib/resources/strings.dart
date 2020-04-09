@@ -6,10 +6,10 @@ class AppStrings {
 
   static Map<String, Map<String, String>> _sMap = {
     CodeStrings.englishCode: {
-      'phoneHint': 'Enter your phone number',
-      'phoneRequired': 'Phone number is required',
-      'phoneInvalid': 'Phone number is invalid',
-      'phoneLabel': 'Phone Number',
+      'mailHint': 'Enter your E-mail Address',
+      'mailRequired': 'E-mail Address is required',
+      'mailInvalid': 'Invalid E-mail Address',
+      'mailLabel': 'E-mail Address',
       'passwordHint': 'Type your password',
       'passwordRequired': 'Password is Required',
       'passwordInvalidError':
@@ -19,15 +19,7 @@ class AppStrings {
       'loginText': 'LOG IN',
       'newAccountText': 'Create New Account',
       'wrongCredentials': 'Wrong Credentials',
-      'sendOtpText': 'SEND OTP',
       'alreadyMemberText': 'Already a member? LOGIN',
-      'otpNoteText':
-          'A 4 digit OTP will be sent via SMS to verify your mobile number',
-      'verifyNumberTextLine1': 'Verify your',
-      'verifyNumberTextLine2': 'Phone Number',
-      'enterOtpText': 'Enter your OTP code here',
-      'verifyText': 'VERIFY',
-      'canResendText': 'You can resend code in',
       'serverErrorText': 'Server internal error',
       'resendText': 'RESEND OTP',
       'setPasswordText': 'Set Password',
@@ -38,26 +30,18 @@ class AppStrings {
       'confirmPasswordHint': 'Confirm your Password',
       'createAccountText': 'CREATE ACCOUNT',
       'passwordsMatchingError': 'Passwords are NOT matched',
-      'otpInvalidError': 'Wrong OTP',
-      'requiredDocsText': 'Required Documents',
-      'frontIdText': 'Front of ID',
-      'backIdText': 'Back of ID',
-      'photoText': 'Photo of you',
-      'scanLabel': 'Scan',
-      'selfieLabel': 'Take Selfie',
-      'submitLabel': 'SUBMIT'
     },
-    CodeStrings.arabicCode: {},
+    CodeStrings.germanCode: {},
   };
 
   /* Login */
-  static String get phoneHint => _sMap[currentCode]["phoneHint"];
+  static String get mailHint => _sMap[currentCode]["mailHint"];
 
-  static String get phoneRequired => _sMap[currentCode]["phoneRequired"];
+  static String get mailRequired => _sMap[currentCode]["mailRequired"];
 
-  static String get phoneInvalid => _sMap[currentCode]["phoneInvalid"];
+  static String get mailInvalid => _sMap[currentCode]["mailInvalid"];
 
-  static String get phoneLabel => _sMap[currentCode]["phoneLabel"];
+  static String get mailLabel => _sMap[currentCode]["mailLabel"];
 
   static String get passwordHint => _sMap[currentCode]["passwordHint"];
 
@@ -77,28 +61,11 @@ class AppStrings {
   static String get wrongCredentials => _sMap[currentCode]["wrongCredentials"];
 
   /* Sign Up */
-  static String get sendOtpText => _sMap[currentCode]["sendOtpText"];
 
   static String get alreadyMemberText =>
       _sMap[currentCode]["alreadyMemberText"];
 
-  static String get otpNoteText => _sMap[currentCode]["otpNoteText"];
-
-  static String get verifyNumberTextLine1 =>
-      _sMap[currentCode]["verifyNumberTextLine1"];
-
-  static String get verifyNumberTextLine2 =>
-      _sMap[currentCode]["verifyNumberTextLine2"];
-
-  static String get enterOtpText => _sMap[currentCode]["enterOtpText"];
-
-  static String get verifyText => _sMap[currentCode]["verifyText"];
-
-  static String get canResendText => _sMap[currentCode]["canResendText"];
-
   static String get serverErrorText => _sMap[currentCode]["serverErrorText"];
-
-  static String get resendText => _sMap[currentCode]["resendText"];
 
   static String get passwordInstructions =>
       _sMap[currentCode]["passwordInstructions"];
@@ -119,21 +86,10 @@ class AppStrings {
   static String get passwordsMatchingError =>
       _sMap[currentCode]["passwordsMatchingError"];
 
-  static String get otpInvalidError => _sMap[currentCode]["otpInvalidError"];
-
   static String get requiredDocsText => _sMap[currentCode]["requiredDocsText"];
 
-  static String get frontIdText => _sMap[currentCode]["frontIdText"];
 
-  static String get backIdText => _sMap[currentCode]["backIdText"];
 
-  static String get photoText => _sMap[currentCode]["photoText"];
-
-  static String get scanLabel => _sMap[currentCode]["scanLabel"];
-
-  static String get selfieLabel => _sMap[currentCode]["selfieLabel"];
-
-  static String get submitLabel => _sMap[currentCode]["submitLabel"];
 
   /* Errors */
   static String get error => _sMap[currentCode]["error"];
@@ -159,7 +115,7 @@ class AppStrings {
 
   static void setCurrentLocal(String code) {
     currentCode = code;
-    if (code != CodeStrings.englishCode && code != CodeStrings.arabicCode) {
+    if (code != CodeStrings.englishCode && code != CodeStrings.germanCode) {
       currentCode = CodeStrings.englishCode;
     }
     langChangedSubject.sink.add(currentCode);
@@ -168,46 +124,15 @@ class AppStrings {
 
 class CodeStrings {
   static const String englishCode = "en";
-  static const String arabicCode = "ar";
+  static const String germanCode = "de";
   static const String english = "English";
-  static const String arabic = "العربية";
-
-  /* API Links */
-  static const String LOGIN_API_PATH = 'https://staging.getchai.io/auth/login';
-  static const String REGISTRATION_API_PATH =
-      'https://staging.getchai.io/auth/register';
-  static const String ACTIVATION_API_PATH =
-      'https://staging.getchai.io/auth/activate/confirm_otp';
-
-  static const String PASSWORD_SET_API_PATH =
-      'https://staging.getchai.io/auth/activate/password';
-
-  static const String KYC_API_PATH =
-      'https://staging.getchai.io/auth/kyc/nid';
-
-  static const String KYC_FACE_API_PATH =
-      'https://staging.getchai.io/auth/kyc/face';
-
-  static const String LOGOUT_API_PATH =
-      'https://staging.getchai.io/auth/logout';
+  static const String german = "Deutsch";
 
   /* Assets */
-  static const String chaiLogoBlack = 'assets/images/Chai-Black.png';
+  static const String appLogo = 'assets/parkour.png';
 
   /* General */
   static const String confirmPasswordTag = 'confirm';
   static const String originalPasswordTag = 'original';
-  static const List<String> docsTags = ['front', 'back', 'selfie'];
 
-  static final List<String> docsTextList = [
-    AppStrings.frontIdText,
-    AppStrings.backIdText,
-    AppStrings.photoText
-  ];
-
-  static final List<String> docsButtonLabelsList = [
-    AppStrings.scanLabel,
-    AppStrings.scanLabel,
-    AppStrings.selfieLabel
-  ];
 }

@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: [
-            const Locale(CodeStrings.arabicCode),
+            const Locale(CodeStrings.germanCode),
             const Locale(CodeStrings.englishCode),
           ],
           debugShowCheckedModeBanner: false,
