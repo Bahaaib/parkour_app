@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parkour_app/bloc/auth/auth_bloc.dart';
+import 'package:parkour_app/bloc/auth/auth_event.dart';
 import 'package:parkour_app/bloc/auth/auth_state.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
@@ -62,8 +63,8 @@ class _LoginPageState extends State<LoginPage> {
                     margin: EdgeInsetsDirectional.only(
                         start: 60.0, end: 60.0, top: 50.0),
                     child: Container(
-                      width: 200.0,
-                      height: 200.0,
+                      width: 120.0,
+                      height: 120.0,
                       child: Image.asset(
                         CodeStrings.appLogo,
                         color: AppColors.primaryColor,
@@ -71,7 +72,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  _buildCredentialsForm()
+                  _buildCredentialsForm(),
+                  _buildSocialIcons(),
+                  _buildRegistrationText()
                 ],
               ),
             ),
@@ -92,7 +95,6 @@ class _LoginPageState extends State<LoginPage> {
           _buildTextLabel(AppStrings.passwordLabel),
           _buildPasswordField(),
           _buildLoginButton(),
-          _buildRegistrationText()
         ],
       ),
     );
@@ -182,6 +184,37 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSocialIcons() {
+    return Container(
+      margin: EdgeInsetsDirectional.only(start: 20, end: 20, top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          InkWell(
+            onTap: () {
+              ///TODO: Login with Google
+              _authBloc.dispatch(LoginWithGoogleRequested());
+            },
+            child: Image.asset(
+              CodeStrings.googleIcon,
+              width: 40.0,
+              height: 40.0,
+            ),
+          ),
+          SizedBox(
+            width: 40,
+          ),
+          InkWell(
+              onTap: () {
+                ///TODO: Login with Facebook
+              },
+              child: Image.asset(CodeStrings.facebookIcon,
+                  width: 40.0, height: 40.0)),
+        ],
       ),
     );
   }

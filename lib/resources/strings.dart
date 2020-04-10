@@ -130,6 +130,8 @@ class CodeStrings {
 
   /* Assets */
   static const String appLogo = 'assets/parkour.png';
+  static const String googleIcon = 'assets/Google.png';
+  static const String facebookIcon = 'assets/facebook.png';
 
   /* General */
   static const String confirmPasswordTag = 'confirm';

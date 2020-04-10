@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "148095529584",
+    "firebase_url": "https://parkour-app-7d8c4.firebaseio.com",
+    "project_id": "parkour-app-7d8c4",
+    "storage_bucket": "parkour-app-7d8c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148095529584:android:348396d9cc32d73e707ab5",
+        "android_client_info": {
+          "package_name": "com.bahaa.parkour_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "148095529584-g75nujv6kbhd6mvvfg16sul3cm2hefkq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bahaa.parkour_app",
+            "certificate_hash": "e07b159ba8d832c83c425429bebb454a388301ea"
+          }
+        },
+        {
+          "client_id": "148095529584-b7950tnpng992discdn4otpf2aruieu8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfyDN27LE-4oRufnsPT0bpv7E9aqYSgrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "148095529584-b7950tnpng992discdn4otpf2aruieu8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
