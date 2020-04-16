@@ -136,5 +136,5 @@ class CodeStrings {
   /* General */
   static const String confirmPasswordTag = 'confirm';
   static const String originalPasswordTag = 'original';
-
+  static const String userSharedPrefKEY = "User";
 }
