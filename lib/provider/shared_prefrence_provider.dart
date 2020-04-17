@@ -28,7 +28,7 @@ class SharedPreferencesProvider {
   void setUser(AuthUser user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(USER,
-        json.encode([user.token, user.id, user.email_address, "false"]).toString());
+        json.encode([user.id, user.username, user.email_address]).toString());
   }
 
   Future deleteUser() async {

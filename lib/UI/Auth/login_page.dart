@@ -277,14 +277,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildRegistrationText() {
-    return InkWell(
-      onTap: () {
-        MainRouter.navigator.pushReplacementNamed(MainRouter.signUpPage);
-      },
-      child: Container(
-        margin: EdgeInsetsDirectional.only(
-            start: 20, end: 20, top: 20, bottom: 20.0),
-        alignment: AlignmentDirectional.center,
+    return Container(
+      margin:
+          EdgeInsetsDirectional.only(start: 20, end: 20, top: 20, bottom: 20.0),
+      alignment: AlignmentDirectional.center,
+      child: InkWell(
+        onTap: () {
+          MainRouter.navigator.pushReplacementNamed(MainRouter.signUpPage);
+        },
         child: Text(
           AppStrings.newAccountText,
           style: TextStyle(

@@ -17,8 +17,6 @@ class UserProvider {
       id: dataList[0],
       username: dataList[1],
       email_address: dataList[2],
-      language: dataList[3],
-      token: dataList[4],
     );
     return user;
   }

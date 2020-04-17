@@ -8,24 +8,17 @@ class AuthUser {
   String id;
   String username;
   String email_address;
-  String language;
-  String token;
 
   AuthUser.cached(
       {@required String id,
       @required String username,
-      @required email_address,
-      @required language,
-      @required token}) {
+      @required email_address}) {
     this.id = id;
     this.username = username;
     this.email_address = email_address;
-    this.language = language;
-    this.token = token;
   }
 
-  AuthUser(
-      this.id, this.username, this.email_address, this.language, this.token);
+  AuthUser(this.id, this.username, this.email_address);
 
   factory AuthUser.fromJson(Map<String, dynamic> json) =>
       _$AuthUserFromJson(json);

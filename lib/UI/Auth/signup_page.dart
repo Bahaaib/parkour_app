@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parkour_app/bloc/auth/auth_bloc.dart';
 import 'package:parkour_app/bloc/auth/auth_event.dart';
@@ -327,14 +328,14 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _buildLoginText() {
-    return InkWell(
-      onTap: () {
-        MainRouter.navigator.pushReplacementNamed(MainRouter.loginPage);
-      },
-      child: Container(
-        margin: EdgeInsetsDirectional.only(
-            start: 20, end: 20, top: 20, bottom: 20.0),
-        alignment: AlignmentDirectional.center,
+    return Container(
+      margin: EdgeInsetsDirectional.only(
+          start: 20, end: 20, top: 20, bottom: 20.0),
+      alignment: AlignmentDirectional.center,
+      child: InkWell(
+        onTap: () {
+          MainRouter.navigator.pushReplacementNamed(MainRouter.loginPage);
+        },
         child: Text(
           AppStrings.alreadyMemberText,
           style: TextStyle(
