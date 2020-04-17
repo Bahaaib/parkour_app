@@ -1,26 +1,26 @@
 import 'dart:async';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parkour_app/bloc/auth/auth_bloc.dart';
-import 'package:parkour_app/bloc/auth/auth_event.dart';
-import 'package:parkour_app/bloc/auth/auth_state.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:parkour_app/support/router.gr.dart';
 
-class LoginPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _mail;
   String _password;
+  String _confirmationPassword;
   final FocusNode _passwordNode = FocusNode();
+  final FocusNode _passwordConfirmationNode = FocusNode();
   bool _isError = false;
   bool _isObscure = true;
 
@@ -29,18 +29,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    _streamSubscription = _authBloc.authSubject.listen((receivedState) {
-      if (receivedState is UserIsLoggedIn) {
-        if (receivedState.authUser != null) {
-          ///TODO: Navigate to Home screen
-        } else {
-          ///TODO: show Error Dialog for Wrong Credentials
-          setState(() {
-            _isError = true;
-          });
-        }
-      }
-    });
+    _streamSubscription = _authBloc.authSubject.listen((receivedState) {});
     super.initState();
   }
 
@@ -64,8 +53,8 @@ class _LoginPageState extends State<LoginPage> {
                     margin: EdgeInsetsDirectional.only(
                         start: 60.0, end: 60.0, top: 50.0),
                     child: Container(
-                      width: 120.0,
-                      height: 120.0,
+                      width: 80.0,
+                      height: 80.0,
                       child: Image.asset(
                         CodeStrings.appLogo,
                         color: AppColors.primaryColor,
@@ -74,8 +63,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   _buildCredentialsForm(),
+                  _buildRegistrationButton(),
                   _buildSocialIcons(),
-                  _buildRegistrationText()
+                  _buildLoginText()
                 ],
               ),
             ),
@@ -95,7 +85,8 @@ class _LoginPageState extends State<LoginPage> {
           _buildMailField(),
           _buildTextLabel(AppStrings.passwordLabel),
           _buildPasswordField(),
-          _buildLoginButton(),
+          _buildTextLabel(AppStrings.confirmPasswordLabel),
+          _buildPasswordConfirmationField()
         ],
       ),
     );
@@ -147,11 +138,13 @@ class _LoginPageState extends State<LoginPage> {
             return AppStrings.passwordRequired;
           }
 
-          if (!_isValidPassword(password)) {
+          if (!_isValidPassword(password, CodeStrings.originalPasswordTag)) {
             return AppStrings.passwordInvalidError;
           }
           return null;
         },
+        onFieldSubmitted: (_) =>
+            FocusScope.of(context).requestFocus(_passwordConfirmationNode),
         obscureText: _isObscure,
         decoration: InputDecoration(
           errorMaxLines: 2,
@@ -175,14 +168,52 @@ class _LoginPageState extends State<LoginPage> {
                   });
                 }),
           ),
-          suffix: InkWell(
-            child: Container(
-              margin: EdgeInsets.only(left: 10, right: 16),
-              child: Text(
-                AppStrings.passwordForgot,
-                style: TextStyle(color: AppColors.primaryColor),
-              ),
-            ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPasswordConfirmationField() {
+    return Container(
+      margin: EdgeInsetsDirectional.only(start: 20, end: 20, top: 10),
+      child: TextFormField(
+        focusNode: _passwordConfirmationNode,
+        validator: (password) {
+          if (password.isEmpty) {
+            return AppStrings.passwordRequired;
+          }
+
+          if (!_isValidPassword(password, CodeStrings.confirmPasswordTag)) {
+            return AppStrings.passwordInvalidError;
+          }
+
+          if (_confirmationPassword != _password) {
+            return AppStrings.passwordsMatchingError;
+          }
+          return null;
+        },
+        obscureText: _isObscure,
+        decoration: InputDecoration(
+          errorMaxLines: 2,
+          hintText: AppStrings.confirmPasswordHint,
+          hintStyle: TextStyle(color: AppColors.darkGrey),
+          suffixIcon: Container(
+            margin: EdgeInsets.only(left: 10, right: 16),
+            child: IconButton(
+                icon: _isObscure
+                    ? Icon(
+                        Icons.visibility_off,
+                        color: AppColors.offGrey,
+                      )
+                    : Icon(
+                        Icons.visibility,
+                        color: AppColors.offGrey,
+                      ),
+                onPressed: () {
+                  setState(() {
+                    _isObscure = !_isObscure;
+                  });
+                }),
           ),
         ),
       ),
@@ -191,14 +222,13 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildSocialIcons() {
     return Container(
-      margin: EdgeInsetsDirectional.only(start: 20, end: 20, top: 20),
+      margin: EdgeInsetsDirectional.only(start: 20, end: 20, top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           InkWell(
             onTap: () {
               ///TODO: Login with Google
-              _authBloc.dispatch(LoginWithGoogleRequested());
             },
             child: Image.asset(
               CodeStrings.googleIcon,
@@ -225,7 +255,7 @@ class _LoginPageState extends State<LoginPage> {
     return EmailValidator.validate(mail);
   }
 
-  bool _isValidPassword(String password) {
+  bool _isValidPassword(String password, String tag) {
     RegExp _lettersRegex = RegExp('[a-zA-Z]');
     RegExp _numbersRegex = RegExp('[0-9]');
     RegExp _specialCharsRegex = RegExp(r'[_\-=@,\.;!#*&%+()^]+$');
@@ -244,30 +274,35 @@ class _LoginPageState extends State<LoginPage> {
       return false;
     }
 
-    _password = password;
+    _setPasswordByTag(password, tag);
     return true;
   }
 
-  Widget _buildLoginButton() {
+  void _setPasswordByTag(String password, String tag) {
+    if (tag == CodeStrings.originalPasswordTag) {
+      _password = password;
+    } else if (tag == CodeStrings.confirmPasswordTag) {
+      _confirmationPassword = password;
+    }
+  }
+
+  Widget _buildRegistrationButton() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 70.0,
       padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-      margin: EdgeInsetsDirectional.only(start: 20, end: 20, top: 30),
+      margin: EdgeInsetsDirectional.only(start: 20, end: 20, top: 20),
       child: RaisedButton(
         color: AppColors.primaryColor,
         child: Text(
-          AppStrings.loginText,
+          AppStrings.signupLabel,
           style: TextStyle(
               color: AppColors.white,
               fontSize: 20.0,
               fontWeight: FontWeight.bold),
         ),
         onPressed: () {
-          if (_formKey.currentState.validate()) {
-            _authBloc
-                .dispatch(LoginWithEmailAndPasswordRequested(_mail, _password));
-          }
+          if (_formKey.currentState.validate()) {}
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -276,17 +311,17 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildRegistrationText() {
+  Widget _buildLoginText() {
     return InkWell(
       onTap: () {
-        MainRouter.navigator.pushReplacementNamed(MainRouter.signUpPage);
+        MainRouter.navigator.pushReplacementNamed(MainRouter.loginPage);
       },
       child: Container(
         margin: EdgeInsetsDirectional.only(
             start: 20, end: 20, top: 20, bottom: 20.0),
         alignment: AlignmentDirectional.center,
         child: Text(
-          AppStrings.newAccountText,
+          AppStrings.alreadyMemberText,
           style: TextStyle(
             color: AppColors.primaryColor,
             fontSize: 16.0,

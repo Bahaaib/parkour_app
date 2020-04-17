@@ -21,6 +21,7 @@ class AppStrings {
       'wrongCredentials': 'Wrong Credentials',
       'alreadyMemberText': 'Already a member? LOGIN',
       'serverErrorText': 'Server internal error',
+      'signupLabel': 'SIGN UP',
       'resendText': 'RESEND OTP',
       'setPasswordText': 'Set Password',
       'passwordInstructions':
@@ -88,8 +89,7 @@ class AppStrings {
 
   static String get requiredDocsText => _sMap[currentCode]["requiredDocsText"];
 
-
-
+  static String get signupLabel => _sMap[currentCode]["signupLabel"];
 
   /* Errors */
   static String get error => _sMap[currentCode]["error"];
