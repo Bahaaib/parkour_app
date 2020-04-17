@@ -1,4 +1,3 @@
-
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:load/load.dart';
 import 'package:parkour_app/bloc/auth/bloc.dart';
@@ -18,13 +17,17 @@ class AuthBloc extends BLoC<AuthEvent> {
     }
 
     if (event is LoginWithEmailAndPasswordRequested) {
-      _loginWithMailAndPassword(event.email, event.password);
+      _loginWithEMailAndPassword(event.email, event.password);
+    }
+
+    if (event is SignUpWithEmailAndPasswordRequested) {
+      _signUpWithEmailAndPassword(event.email, event.password);
     }
 
     if (event is UserLogoutRequested) {}
   }
 
-  Future<void> _loginWithMailAndPassword(String email, String password) async {
+  Future<void> _loginWithEMailAndPassword(String email, String password) async {
     showLoadingDialog();
 
     await _firebaseAuth
@@ -50,6 +53,7 @@ class AuthBloc extends BLoC<AuthEvent> {
       var user = await _googleSignIn.signIn();
       if (user != null) {
         print(user.email);
+
         ///TODO: Get user data from DB
       } else {
         authSubject.add(UserIsLoggedIn(null));
@@ -58,6 +62,23 @@ class AuthBloc extends BLoC<AuthEvent> {
       authSubject.add(UserIsLoggedIn(null));
       print(error);
     }
+  }
+
+  Future<void> _signUpWithEmailAndPassword(
+      String email, String password) async {
+    showLoadingDialog();
+
+    await _firebaseAuth
+        .createUserWithEmailAndPassword(
+            email: _getCleanString(email), password: password)
+        .then((result) {
+      FirebaseUser user = result.user;
+      authSubject.add(UserIsRegisteredWithEmailAndPassword(true));
+      hideLoadingDialog();
+    }).catchError((error) {
+      authSubject.add(UserIsRegisteredWithEmailAndPassword(false));
+      hideLoadingDialog();
+    });
   }
 
   ///Extracts the white spaces out of string

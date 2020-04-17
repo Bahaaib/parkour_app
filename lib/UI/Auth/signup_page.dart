@@ -4,6 +4,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parkour_app/bloc/auth/auth_bloc.dart';
+import 'package:parkour_app/bloc/auth/auth_event.dart';
+import 'package:parkour_app/bloc/auth/auth_state.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
 import 'package:parkour_app/support/router.gr.dart';
@@ -29,14 +31,24 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void initState() {
-    _streamSubscription = _authBloc.authSubject.listen((receivedState) {});
+    _streamSubscription = _authBloc.authSubject.listen((receivedState) {
+      if(receivedState is UserIsRegisteredWithEmailAndPassword){
+        if(receivedState.isSuccessful){
+          ///TODO: Nav to Home page
+        }else{
+          setState(() {
+            _isError = true;
+          });
+        }
+      }
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     if (_isError) {
-      _showSnackBar(AppStrings.wrongCredentials);
+      _showSnackBar(AppStrings.userExistsError);
       _isError = false;
     }
 
@@ -228,7 +240,7 @@ class _SignUpPageState extends State<SignUpPage> {
         children: <Widget>[
           InkWell(
             onTap: () {
-              ///TODO: Login with Google
+              ///TODO: signUp with Google
             },
             child: Image.asset(
               CodeStrings.googleIcon,
@@ -302,7 +314,10 @@ class _SignUpPageState extends State<SignUpPage> {
               fontWeight: FontWeight.bold),
         ),
         onPressed: () {
-          if (_formKey.currentState.validate()) {}
+          if (_formKey.currentState.validate()) {
+            _authBloc.dispatch(
+                SignUpWithEmailAndPasswordRequested(_mail, _password));
+          }
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),

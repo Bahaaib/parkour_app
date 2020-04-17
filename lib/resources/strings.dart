@@ -31,9 +31,12 @@ class AppStrings {
       'confirmPasswordHint': 'Confirm your Password',
       'createAccountText': 'CREATE ACCOUNT',
       'passwordsMatchingError': 'Passwords are NOT matched',
+      'userExistsError': 'This account is already registered'
     },
     CodeStrings.germanCode: {},
   };
+
+
 
   /* Login */
   static String get mailHint => _sMap[currentCode]["mailHint"];
@@ -90,6 +93,8 @@ class AppStrings {
   static String get requiredDocsText => _sMap[currentCode]["requiredDocsText"];
 
   static String get signupLabel => _sMap[currentCode]["signupLabel"];
+
+  static String get userExistsError => _sMap[currentCode]["userExistsError"];
 
   /* Errors */
   static String get error => _sMap[currentCode]["error"];

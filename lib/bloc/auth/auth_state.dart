@@ -8,4 +8,10 @@ class UserIsLoggedIn extends AuthState {
   UserIsLoggedIn(this.authUser);
 }
 
-class UserIsLoggedout extends AuthState {}
+class UserIsRegisteredWithEmailAndPassword extends AuthState {
+  final bool isSuccessful;
+
+  UserIsRegisteredWithEmailAndPassword(this.isSuccessful);
+}
+
+class UserIsLoggedOut extends AuthState {}
