@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   GlobalKey<FormState> _formKey = GlobalKey();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  String mail;
+  String _mail;
   String _password;
   FocusNode _passwordNode = FocusNode();
   bool _isError = false;
@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
           if (!_isValidEmail(mail)) {
             return AppStrings.mailInvalid;
           }
-
+          _mail = mail;
           return null;
         },
         keyboardType: TextInputType.emailAddress,
@@ -205,15 +205,16 @@ class _LoginPageState extends State<LoginPage> {
               height: 40.0,
             ),
           ),
-          SizedBox(
-            width: 40,
-          ),
-          InkWell(
-              onTap: () {
-                ///TODO: Login with Facebook
-              },
-              child: Image.asset(CodeStrings.facebookIcon,
-                  width: 40.0, height: 40.0)),
+//          SizedBox(
+//            width: 40,
+//          ),
+//          InkWell(
+//            onTap: () {
+//              ///TODO: Login with Facebook
+//            },
+//            child: Image.asset(CodeStrings.facebookIcon,
+//                width: 40.0, height: 40.0),
+//          ),
         ],
       ),
     );
@@ -263,7 +264,8 @@ class _LoginPageState extends State<LoginPage> {
         ),
         onPressed: () {
           if (_formKey.currentState.validate()) {
-            ///TODO: Dispatch login by mail event
+            _authBloc
+                .dispatch(LoginWithEmailAndPasswordRequested(_mail, _password));
           }
         },
         shape: RoundedRectangleBorder(
