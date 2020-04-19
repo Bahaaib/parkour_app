@@ -32,10 +32,15 @@ class AppStrings {
       'createAccountText': 'CREATE ACCOUNT',
       'passwordsMatchingError': 'Passwords are NOT matched',
       'userExistsError': 'This account is already registered',
-      'signedSuccessMessage': 'Your account has been created successfully'
+      'signedSuccessMessage': 'Your account has been created successfully',
+      'resetPasswordLabel': 'RESET PASSWORD',
+      'resetSuccessMessage': 'An e-mail with reset details has been sent to you',
+      'noMailError':'This E-mail is not registered on our systems'
     },
     CodeStrings.germanCode: {},
   };
+
+
 
   /* Login */
   static String get mailHint => _sMap[currentCode]["mailHint"];
@@ -95,7 +100,17 @@ class AppStrings {
 
   static String get userExistsError => _sMap[currentCode]["userExistsError"];
 
-  static String get signedSuccessMessage => _sMap[currentCode]["signedSuccessMessage"];
+  static String get signedSuccessMessage =>
+      _sMap[currentCode]["signedSuccessMessage"];
+
+  static String get resetPasswordLabel =>
+      _sMap[currentCode]["resetPasswordLabel"];
+
+  static String get noMailError =>
+      _sMap[currentCode]["noMailError"];
+
+  static String get resetSuccessMessage =>
+      _sMap[currentCode]["resetSuccessMessage"];
 
   /* Errors */
   static String get error => _sMap[currentCode]["error"];
@@ -147,6 +162,7 @@ class CodeStrings {
   static const String databaseProductionInstance = "production";
   static const String usersDatabaseRef = "users";
   static const String resultSignupSuccess = "signup_sucess";
+  static const String resultPasswordResetSuccess = "pass_reset_sucess";
   static const String typeSuccess = 'success';
   static const String typeError = 'error';
 }

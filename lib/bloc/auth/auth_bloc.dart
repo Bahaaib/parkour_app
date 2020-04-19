@@ -171,7 +171,11 @@ class AuthBloc extends BLoC<AuthEvent> {
   }
 
   Future<void> _resetPassword(String email)async{
-    _firebaseAuth.sendPasswordResetEmail(email: email);
+    _firebaseAuth.sendPasswordResetEmail(email: email).then((_){
+      authSubject.add(PasswordIsReset(true));
+    }).catchError((_){
+      authSubject.add(PasswordIsReset(false));
+    });
   }
 
   ///Extracts the white spaces out of string

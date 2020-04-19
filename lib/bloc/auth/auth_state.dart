@@ -21,4 +21,10 @@ class CurrentUserIs extends AuthState {
   CurrentUserIs(this.user);
 }
 
+class PasswordIsReset extends AuthState {
+  final bool isSuccessful;
+
+  PasswordIsReset(this.isSuccessful);
+}
+
 class UserIsLoggedOut extends AuthState {}

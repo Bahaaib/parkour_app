@@ -11,12 +11,14 @@ import 'package:parkour_app/UI/splash_screen.dart';
 import 'package:parkour_app/UI/home_page.dart';
 import 'package:parkour_app/UI/Auth/login_page.dart';
 import 'package:parkour_app/UI/Auth/signup_page.dart';
+import 'package:parkour_app/UI/Auth/reset_password_page.dart';
 
 class MainRouter {
   static const splashScreen = '/';
   static const homePage = '/home-page';
   static const loginPage = '/login-page';
   static const signUpPage = '/sign-up-page';
+  static const passwordResetScreen = '/password-reset-screen';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<MainRouter>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -42,6 +44,11 @@ class MainRouter {
       case MainRouter.signUpPage:
         return MaterialPageRoute(
           builder: (_) => SignUpPage(),
+          settings: settings,
+        );
+      case MainRouter.passwordResetScreen:
+        return MaterialPageRoute(
+          builder: (_) => PasswordResetScreen(),
           settings: settings,
         );
       default:

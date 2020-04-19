@@ -33,6 +33,8 @@ class _LoginPageState extends State<LoginPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_result == CodeStrings.resultSignupSuccess) {
         _showSnackBar(AppStrings.signedSuccessMessage, CodeStrings.typeSuccess);
+      } else if (_result == CodeStrings.resultPasswordResetSuccess) {
+        _showSnackBar(AppStrings.resetSuccessMessage, CodeStrings.typeSuccess);
       }
     });
     _streamSubscription = _authBloc.authSubject.listen((receivedState) {
@@ -41,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
           MainRouter.navigator
               .pushNamedAndRemoveUntil(MainRouter.homePage, (_) => false);
         } else {
-          ///TODO: show Error Dialog for Wrong Credentials
           setState(() {
             _isError = true;
           });
@@ -197,6 +198,8 @@ class _LoginPageState extends State<LoginPage> {
                 }),
           ),
           suffix: InkWell(
+            onTap: () =>
+                MainRouter.navigator.pushNamed(MainRouter.passwordResetScreen),
             child: Container(
               margin: EdgeInsets.only(left: 10, right: 16),
               child: Text(
@@ -218,7 +221,6 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           InkWell(
             onTap: () {
-              ///TODO: Login with Google
               _authBloc.dispatch(LoginWithGoogleRequested());
             },
             child: Image.asset(
