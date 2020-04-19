@@ -31,12 +31,11 @@ class AppStrings {
       'confirmPasswordHint': 'Confirm your Password',
       'createAccountText': 'CREATE ACCOUNT',
       'passwordsMatchingError': 'Passwords are NOT matched',
-      'userExistsError': 'This account is already registered'
+      'userExistsError': 'This account is already registered',
+      'signedSuccessMessage': 'Your account has been created successfully'
     },
     CodeStrings.germanCode: {},
   };
-
-
 
   /* Login */
   static String get mailHint => _sMap[currentCode]["mailHint"];
@@ -96,6 +95,8 @@ class AppStrings {
 
   static String get userExistsError => _sMap[currentCode]["userExistsError"];
 
+  static String get signedSuccessMessage => _sMap[currentCode]["signedSuccessMessage"];
+
   /* Errors */
   static String get error => _sMap[currentCode]["error"];
 
@@ -141,5 +142,11 @@ class CodeStrings {
   /* General */
   static const String confirmPasswordTag = 'confirm';
   static const String originalPasswordTag = 'original';
-  static const String userSharedPrefKEY = "User";
+  static const String userSharedPrefKEY = "user_key";
+  static const String databaseDevInstance = "dev";
+  static const String databaseProductionInstance = "production";
+  static const String usersDatabaseRef = "users";
+  static const String resultSignupSuccess = "signup_sucess";
+  static const String typeSuccess = 'success';
+  static const String typeError = 'error';
 }

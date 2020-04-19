@@ -23,16 +23,23 @@ class _LoginPageState extends State<LoginPage> {
   final FocusNode _passwordNode = FocusNode();
   bool _isError = false;
   bool _isObscure = true;
+  String _result;
 
   final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
   StreamSubscription _streamSubscription;
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_result == CodeStrings.resultSignupSuccess) {
+        _showSnackBar(AppStrings.signedSuccessMessage, CodeStrings.typeSuccess);
+      }
+    });
     _streamSubscription = _authBloc.authSubject.listen((receivedState) {
       if (receivedState is UserIsLoggedIn) {
         if (receivedState.authUser != null) {
-          ///TODO: Navigate to Home screen
+          MainRouter.navigator
+              .pushNamedAndRemoveUntil(MainRouter.homePage, (_) => false);
         } else {
           ///TODO: show Error Dialog for Wrong Credentials
           setState(() {
@@ -44,10 +51,22 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
+  void _checkPassedArguments() {
+    final args =
+        ModalRoute.of(context).settings.arguments as Map<String, String>;
+    if (args != null) {
+      setState(() {
+        _result = args['result'];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _checkPassedArguments();
+
     if (_isError) {
-      _showSnackBar(AppStrings.wrongCredentials);
+      _showSnackBar(AppStrings.wrongCredentials, CodeStrings.typeError);
       _isError = false;
     }
 
@@ -74,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   _buildCredentialsForm(),
+                  _buildLoginButton(),
                   _buildSocialIcons(),
                   _buildRegistrationText()
                 ],
@@ -95,7 +115,6 @@ class _LoginPageState extends State<LoginPage> {
           _buildMailField(),
           _buildTextLabel(AppStrings.passwordLabel),
           _buildPasswordField(),
-          _buildLoginButton(),
         ],
       ),
     );
@@ -116,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
       margin: EdgeInsetsDirectional.only(start: 20, end: 20, top: 10),
       child: TextFormField(
         validator: (mail) {
+          print('XXX -> $mail');
           if (mail.isEmpty) {
             return AppStrings.mailRequired;
           }
@@ -143,6 +163,7 @@ class _LoginPageState extends State<LoginPage> {
       child: TextFormField(
         focusNode: _passwordNode,
         validator: (password) {
+          print('XXX -> $password');
           if (password.isEmpty) {
             return AppStrings.passwordRequired;
           }
@@ -298,19 +319,28 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _showSnackBar(String message) {
+  void _showSnackBar(String message, String type) {
     _scaffoldKey.currentState.showSnackBar(
       new SnackBar(
         content: Row(
           children: <Widget>[
             Icon(
-              Icons.warning,
-              color: AppColors.white,
-            ),
+                type == CodeStrings.typeError
+                    ? Icons.warning
+                    : Icons.check_circle,
+                color: type == CodeStrings.typeError
+                    ? AppColors.white
+                    : Colors.lightGreen),
             SizedBox(
               width: 8.0,
             ),
-            Text(message),
+            Text(
+              message,
+              style: TextStyle(
+                  color: type == CodeStrings.typeError
+                      ? AppColors.white
+                      : Colors.lightGreen),
+            ),
           ],
         ),
       ),

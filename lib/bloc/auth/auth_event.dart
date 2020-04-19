@@ -16,4 +16,12 @@ class SignUpWithEmailAndPasswordRequested extends AuthEvent {
   SignUpWithEmailAndPasswordRequested(this.email, this.password);
 }
 
+class UserCurrentStatusRequested extends AuthEvent {}
+
+class UserPasswordResetRequested extends AuthEvent {
+  final String email;
+
+  UserPasswordResetRequested(this.email);
+}
+
 class UserLogoutRequested extends AuthEvent {}

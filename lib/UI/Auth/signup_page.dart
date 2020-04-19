@@ -33,10 +33,12 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void initState() {
     _streamSubscription = _authBloc.authSubject.listen((receivedState) {
-      if(receivedState is UserIsRegisteredWithEmailAndPassword){
-        if(receivedState.isSuccessful){
-          ///TODO: Nav to Home page
-        }else{
+      if (receivedState is UserIsRegisteredWithEmailAndPassword) {
+        if (receivedState.isSuccessful) {
+          MainRouter.navigator.pushNamedAndRemoveUntil(
+              MainRouter.loginPage, (_) => false,
+              arguments: {'result': CodeStrings.resultSignupSuccess});
+        } else {
           setState(() {
             _isError = true;
           });
@@ -329,8 +331,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildLoginText() {
     return Container(
-      margin: EdgeInsetsDirectional.only(
-          start: 20, end: 20, top: 20, bottom: 20.0),
+      margin:
+          EdgeInsetsDirectional.only(start: 20, end: 20, top: 20, bottom: 20.0),
       alignment: AlignmentDirectional.center,
       child: InkWell(
         onTap: () {

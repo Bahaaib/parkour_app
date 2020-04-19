@@ -9,13 +9,10 @@ class AuthUser {
   String username;
   String email_address;
 
-  AuthUser.cached(
-      {@required String id,
-      @required String username,
-      @required email_address}) {
-    this.id = id;
-    this.username = username;
-    this.email_address = email_address;
+  AuthUser.firebaseUser({@required Map<dynamic, dynamic> firebaseMap}) {
+    this.id = firebaseMap['id'];
+    this.username = firebaseMap['username'];
+    this.email_address = firebaseMap['email_address'];
   }
 
   AuthUser(this.id, this.username, this.email_address);
