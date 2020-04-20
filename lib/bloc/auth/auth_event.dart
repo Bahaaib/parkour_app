@@ -24,4 +24,6 @@ class UserPasswordResetRequested extends AuthEvent {
   UserPasswordResetRequested(this.email);
 }
 
+class UserDataByCachedIdRequested extends AuthEvent {}
+
 class UserLogoutRequested extends AuthEvent {}

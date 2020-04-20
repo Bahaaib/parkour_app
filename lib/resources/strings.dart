@@ -34,13 +34,44 @@ class AppStrings {
       'userExistsError': 'This account is already registered',
       'signedSuccessMessage': 'Your account has been created successfully',
       'resetPasswordLabel': 'RESET PASSWORD',
-      'resetSuccessMessage': 'An e-mail with reset details has been sent to you',
-      'noMailError':'This E-mail is not registered on our systems'
+      'resetSuccessMessage':
+          'An e-mail with reset details has been sent to you',
+      'noMailError': 'This E-mail is not registered on our systems',
+      'account': 'Account',
+      'personalInfo': 'Personal Information',
+      'changePassword': 'Change Password',
+      'myContributions': 'My Contributions',
+      'general': 'General',
+      'privacyPolicy': 'Privacy Policy',
+      'termsAndConditions': 'Terms and Conditions',
+      'logout': 'Logout',
+      'cancelLabel': 'Cancel',
+      'logoutText': 'Are you sure you want to logout?',
     },
     CodeStrings.germanCode: {},
   };
 
+  /* Home Page */
+  static String get logout => _sMap[currentCode]["logout"];
 
+  static String get logoutText => _sMap[currentCode]["logoutText"];
+
+  static String get cancelLabel => _sMap[currentCode]["cancelLabel"];
+
+  static String get general => _sMap[currentCode]["general"];
+
+  static String get privacyPolicy => _sMap[currentCode]["privacyPolicy"];
+
+  static String get termsAndConditions =>
+      _sMap[currentCode]["termsAndConditions"];
+
+  static String get account => _sMap[currentCode]["account"];
+
+  static String get personalInfo => _sMap[currentCode]["personalInfo"];
+
+  static String get changePassword => _sMap[currentCode]["changePassword"];
+
+  static String get myContributions => _sMap[currentCode]["myContributions"];
 
   /* Login */
   static String get mailHint => _sMap[currentCode]["mailHint"];
@@ -106,8 +137,7 @@ class AppStrings {
   static String get resetPasswordLabel =>
       _sMap[currentCode]["resetPasswordLabel"];
 
-  static String get noMailError =>
-      _sMap[currentCode]["noMailError"];
+  static String get noMailError => _sMap[currentCode]["noMailError"];
 
   static String get resetSuccessMessage =>
       _sMap[currentCode]["resetSuccessMessage"];

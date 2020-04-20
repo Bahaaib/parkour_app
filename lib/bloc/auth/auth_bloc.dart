@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:parkour_app/provider/user_provider.dart';
 import 'package:parkour_app/resources/strings.dart';
+import 'package:parkour_app/support/router.gr.dart';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,36 +24,42 @@ class AuthBloc extends BLoC<AuthEvent> {
   @override
   void dispatch(AuthEvent event) async {
     if (event is LoginWithGoogleRequested) {
-      _loginWithGoogle();
+      await _loginWithGoogle();
     }
 
     if (event is LoginWithEmailAndPasswordRequested) {
-      _loginWithEMailAndPassword(event.email, event.password);
+      await _loginWithEMailAndPassword(event.email, event.password);
     }
 
     if (event is SignUpWithEmailAndPasswordRequested) {
-      _signUpWithEmailAndPassword(event.email, event.password);
+      await _signUpWithEmailAndPassword(event.email, event.password);
     }
 
     if (event is UserCurrentStatusRequested) {
-      _getCurrentUser();
+      await _getCurrentUser();
     }
 
-    if(event is UserPasswordResetRequested){
-      _resetPassword(event.email);
+    if (event is UserPasswordResetRequested) {
+      await _resetPassword(event.email);
     }
 
-    if (event is UserLogoutRequested) {}
+    if (event is UserDataByCachedIdRequested) {
+      await _getUserById();
+    }
+
+    if (event is UserLogoutRequested) {
+      await _logout();
+    }
   }
 
   Future<void> _loginWithEMailAndPassword(String email, String password) async {
     showLoadingDialog();
-
+    FirebaseUser user;
     await _firebaseAuth
         .signInWithEmailAndPassword(
             email: _getCleanString(email), password: password)
         .then((result) async {
-      FirebaseUser user = result.user;
+      user = result.user;
       await _getUserDataByEmail(email);
       hideLoadingDialog();
     }).catchError((error) {
@@ -60,6 +67,8 @@ class AuthBloc extends BLoC<AuthEvent> {
       authSubject.add(UserIsLoggedIn(null));
       hideLoadingDialog();
     });
+
+    _addKeyInPreferences(user.uid);
   }
 
   Future<void> _loginWithGoogle() async {
@@ -87,14 +96,14 @@ class AuthBloc extends BLoC<AuthEvent> {
   Future<void> _signUpWithEmailAndPassword(
       String email, String password) async {
     showLoadingDialog();
-
+    FirebaseUser user;
     await _firebaseAuth
         .createUserWithEmailAndPassword(
             email: _getCleanString(email), password: password)
         .then((result) {
-      FirebaseUser user = result.user;
+      user = result.user;
 
-      _createUserInDatabase(email);
+      _createUserInDatabase(email, user.uid);
       authSubject.add(UserIsRegisteredWithEmailAndPassword(true));
       _firebaseAuth.signOut();
       hideLoadingDialog();
@@ -102,21 +111,19 @@ class AuthBloc extends BLoC<AuthEvent> {
       authSubject.add(UserIsRegisteredWithEmailAndPassword(false));
       hideLoadingDialog();
     });
+
   }
 
-  Future<void> _createUserInDatabase(String email) async {
+  Future<void> _createUserInDatabase(String email, String uid) async {
     DatabaseReference ref = FirebaseDatabase.instance
         .reference()
         .child(CodeStrings.databaseDevInstance)
         .child(CodeStrings.usersDatabaseRef)
         .push();
     ref.set({
-      'id': DateTime.now().millisecondsSinceEpoch.toString(),
+      'id': uid,
       'email_address': email,
     });
-
-    _updateUserId(ref.key);
-    _addKeyInPreferences(ref.key);
   }
 
   Future<void> _addKeyInPreferences(String key) async {
@@ -124,18 +131,14 @@ class AuthBloc extends BLoC<AuthEvent> {
     prefs.setString(CodeStrings.userSharedPrefKEY, key);
   }
 
+  Future<String> _getUserIdFromPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(CodeStrings.userSharedPrefKEY);
+  }
+
   Future<void> _removeKeyFromPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove(CodeStrings.userSharedPrefKEY);
-  }
-
-  Future<void> _updateUserId(String key) async {
-    FirebaseDatabase.instance
-        .reference()
-        .child(CodeStrings.databaseDevInstance)
-        .child(CodeStrings.usersDatabaseRef)
-        .child(key)
-        .update({'id': key});
   }
 
   Future<void> _getUserDataByEmail(String email) async {
@@ -165,17 +168,52 @@ class AuthBloc extends BLoC<AuthEvent> {
     });
   }
 
+  Future<void> _getUserById() async {
+    String uid = await _getUserIdFromPreferences();
+    Map<dynamic, dynamic> children = {};
+    List<AuthUser> users = [];
+
+    _usersDbRef
+        .child(CodeStrings.databaseDevInstance)
+        .child(CodeStrings.usersDatabaseRef)
+        .once()
+        .then((DataSnapshot datasnapshot) {
+      children = datasnapshot.value;
+
+      children.forEach((key, value) {
+        AuthUser user = AuthUser.firebaseUser(firebaseMap: value);
+        users.add(user);
+      });
+
+      for (AuthUser user in users) {
+        if (user.id == uid) {
+          print('USER ==> ${user.id}');
+          _userProvider.user = user;
+          break;
+        }
+      }
+      authSubject.add(UserDataIsFetched());
+    });
+  }
+
   Future<void> _getCurrentUser() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
     authSubject.add(CurrentUserIs(user));
   }
 
-  Future<void> _resetPassword(String email)async{
-    _firebaseAuth.sendPasswordResetEmail(email: email).then((_){
+  Future<void> _resetPassword(String email) async {
+    _firebaseAuth.sendPasswordResetEmail(email: email).then((_) {
       authSubject.add(PasswordIsReset(true));
-    }).catchError((_){
+    }).catchError((_) {
       authSubject.add(PasswordIsReset(false));
     });
+  }
+
+  Future<void> _logout() async {
+    FirebaseAuth.instance.signOut();
+    _removeKeyFromPreferences();
+    MainRouter.navigator
+        .pushNamedAndRemoveUntil(MainRouter.loginPage, (_) => false);
   }
 
   ///Extracts the white spaces out of string

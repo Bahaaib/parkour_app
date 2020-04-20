@@ -27,4 +27,6 @@ class PasswordIsReset extends AuthState {
   PasswordIsReset(this.isSuccessful);
 }
 
+class UserDataIsFetched extends AuthState{}
+
 class UserIsLoggedOut extends AuthState {}

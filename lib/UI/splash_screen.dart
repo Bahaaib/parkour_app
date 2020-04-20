@@ -17,12 +17,16 @@ class _SplashScreenState extends State<SplashScreen> {
     _authBloc.authSubject.listen((receivedState) {
       if (receivedState is CurrentUserIs) {
         if (receivedState.user != null) {
-          MainRouter.navigator
-              .pushNamedAndRemoveUntil(MainRouter.homePage, (_) => false);
-        }else{
+          _authBloc.dispatch(UserDataByCachedIdRequested());
+        } else {
           MainRouter.navigator
               .pushNamedAndRemoveUntil(MainRouter.loginPage, (_) => false);
         }
+      }
+
+      if (receivedState is UserDataIsFetched) {
+        MainRouter.navigator
+            .pushNamedAndRemoveUntil(MainRouter.homePage, (_) => false);
       }
     });
     super.initState();
