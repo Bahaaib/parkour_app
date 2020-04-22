@@ -47,10 +47,11 @@ class AppStrings {
       'logout': 'Logout',
       'cancelLabel': 'Cancel',
       'logoutText': 'Are you sure you want to logout?',
+      'profileText':'Personal info'
     },
     CodeStrings.germanCode: {},
   };
-
+  static String get profileText => _sMap[currentCode]["profileText"];
   /* Home Page */
   static String get logout => _sMap[currentCode]["logout"];
 

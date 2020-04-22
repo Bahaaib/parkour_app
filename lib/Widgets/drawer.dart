@@ -74,7 +74,7 @@ class _MainDrawerState extends State<MainDrawer> {
               ),
               sectionHeader(AppStrings.account),
               menuOption(AppStrings.personalInfo,
-                  () => navigate(MainRouter.loginPage)),
+                  () => navigate(MainRouter.profilePage)),
               menuOption(AppStrings.changePassword,
                   () => navigate(MainRouter.loginPage)),
               menuOption(AppStrings.myContributions,

@@ -63,7 +63,6 @@ class AuthBloc extends BLoC<AuthEvent> {
       await _getUserDataByEmail(email);
       hideLoadingDialog();
     }).catchError((error) {
-      print(error.toString());
       authSubject.add(UserIsLoggedIn(null));
       hideLoadingDialog();
     });
@@ -123,6 +122,7 @@ class AuthBloc extends BLoC<AuthEvent> {
     ref.set({
       'id': uid,
       'email_address': email,
+      'child_id':ref.key
     });
   }
 

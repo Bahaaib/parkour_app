@@ -1,4 +1,5 @@
 import 'package:parkour_app/bloc/auth/auth_bloc.dart';
+import 'package:parkour_app/bloc/profile/profile_bloc.dart';
 import 'package:parkour_app/provider/shared_prefrence_provider.dart';
 import 'package:parkour_app/provider/user_provider.dart';
 import 'package:parkour_app/resources/strings.dart';
@@ -44,6 +45,7 @@ class _MyAppState extends State<MyApp> {
     GetIt.instance.registerSingleton<UserProvider>(UserProvider());
     GetIt.instance.registerSingleton<APIManager>(APIManager());
     GetIt.instance.registerSingleton<AuthBloc>(AuthBloc());
+    GetIt.instance.registerSingleton<ProfileBloc>(ProfileBloc());
 
   }
 
