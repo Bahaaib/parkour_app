@@ -68,10 +68,11 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _buildTextLabel('General info', topMargin: 40.0, fontSize: 20.0),
+              _buildTextLabel(AppStrings.generalInfoText,
+                  topMargin: 40.0, fontSize: 20.0),
               _buildInfoForm(),
               _buildEmailRow(),
-              _buildTextLabel('Social accounts',
+              _buildTextLabel(AppStrings.socialAccountsText,
                   topMargin: 40.0, fontSize: 20.0),
               _buildSocialAccountsForm(),
               _buildSaveButton()
@@ -88,17 +89,17 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _buildTextLabel('Username', topMargin: 30.0),
+          _buildTextLabel(AppStrings.usernameLabel, topMargin: 30.0),
           _buildRegularField(
-              tag: 'username',
+              tag: CodeStrings.usernameTag,
               controller: _controllers[0],
-              hint: 'Type your username',
+              hint: AppStrings.usernameHint,
               destinationNode: _addressFocusNode),
-          _buildTextLabel('Address'),
+          _buildTextLabel(AppStrings.addressLabel),
           _buildRegularField(
-              tag: 'address',
+              tag: CodeStrings.addressTag,
               controller: _controllers[1],
-              hint: 'Type your Address (City, Province,..)',
+              hint: AppStrings.addressLabel,
               fieldNode: _addressFocusNode),
         ],
       ),
@@ -138,20 +139,20 @@ class _ProfilePageState extends State<ProfilePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _buildSocialAccountField(
-              tag: 'whatsapp_number',
-              hint: 'Type your What\'s App Number',
+              tag: CodeStrings.whatsappTag,
+              hint: AppStrings.whatsappHint,
               controller: _controllers[2],
-              prefixPath: 'assets/ic_whatsapp.png'),
+              prefixPath: CodeStrings.whatsappSmallIcon),
           _buildSocialAccountField(
-              tag: 'facebook_url',
-              hint: 'Type your Facebook URL',
+              tag: CodeStrings.facebookTag,
+              hint: AppStrings.facebookHint,
               controller: _controllers[3],
-              prefixPath: 'assets/ic_facebook.png'),
+              prefixPath: CodeStrings.facebookSmallIcon),
           _buildSocialAccountField(
-              tag: 'twitter_url',
-              hint: 'Type your Twitter URL',
+              tag: CodeStrings.twitterTag,
+              hint: AppStrings.twitterHint,
               controller: _controllers[4],
-              prefixPath: 'assets/ic_twitter.png'),
+              prefixPath: CodeStrings.twitterSmallIcon),
         ],
       ),
     );
@@ -189,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          _buildTextLabel('E-mail Address:', topMargin: 40.0),
+          _buildTextLabel(AppStrings.mailLabel, topMargin: 40.0),
           _buildTextLabel(_userProvider.user.email_address,
               topMargin: 40.0, textColor: AppColors.offGrey)
         ],
@@ -207,7 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: RaisedButton(
         color: AppColors.primaryColor,
         child: Text(
-          'SAVE',
+          AppStrings.saveButtonLabel,
           style: TextStyle(
               color: AppColors.white,
               fontSize: 20.0,

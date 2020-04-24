@@ -47,11 +47,35 @@ class AppStrings {
       'logout': 'Logout',
       'cancelLabel': 'Cancel',
       'logoutText': 'Are you sure you want to logout?',
-      'profileText':'Personal info'
+      'profileText': 'Personal info',
+      'generalInfoText':'General info',
+      'socialAccountsText':'Social accounts',
+      'usernameLabel': 'Username',
+      'addressLabel': 'Address',
+      'usernameHint': 'Type your username',
+      'addressHint': 'Type your Address (City, Province,..)',
+      'whatsappHint': 'Type your What\'s App Number',
+      'facebookHint': 'Type your Facebook URL',
+      'twitterHint': 'Type your Twitter URL',
+      'saveButtonLabel': 'SAVE',
     },
     CodeStrings.germanCode: {},
   };
+
+  /* Profile */
+
   static String get profileText => _sMap[currentCode]["profileText"];
+  static String get generalInfoText => _sMap[currentCode]["generalInfoText"];
+  static String get socialAccountsText => _sMap[currentCode]["socialAccountsText"];
+  static String get usernameLabel => _sMap[currentCode]["usernameLabel"];
+  static String get addressLabel => _sMap[currentCode]["addressLabel"];
+  static String get usernameHint => _sMap[currentCode]["usernameHint"];
+  static String get addressHint => _sMap[currentCode]["addressHint"];
+  static String get whatsappHint => _sMap[currentCode]["whatsappHint"];
+  static String get facebookHint => _sMap[currentCode]["facebookHint"];
+  static String get twitterHint => _sMap[currentCode]["twitterHint"];
+  static String get saveButtonLabel => _sMap[currentCode]["saveButtonLabel"];
+
   /* Home Page */
   static String get logout => _sMap[currentCode]["logout"];
 
@@ -184,6 +208,9 @@ class CodeStrings {
   static const String appLogo = 'assets/parkour.png';
   static const String googleIcon = 'assets/Google.png';
   static const String facebookIcon = 'assets/facebook.png';
+  static const String twitterSmallIcon = 'assets/ic_twitter.png';
+  static const String facebookSmallIcon = 'assets/ic_facebook.png';
+  static const String whatsappSmallIcon = 'assets/ic_whatsapp.png';
 
   /* General */
   static const String confirmPasswordTag = 'confirm';
@@ -196,4 +223,9 @@ class CodeStrings {
   static const String resultPasswordResetSuccess = "pass_reset_sucess";
   static const String typeSuccess = 'success';
   static const String typeError = 'error';
+  static const String twitterTag = 'twitter_url';
+  static const String facebookTag = 'facebook_url';
+  static const String whatsappTag = 'Type your What\'s App Number';
+  static const String addressTag = 'address';
+  static const String usernameTag = 'username';
 }
