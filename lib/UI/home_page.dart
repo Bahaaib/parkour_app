@@ -15,6 +15,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () =>
+            MainRouter.navigator.pushNamed(MainRouter.placeSubmissionPage),
+        child: Icon(
+          Icons.add,
+          color: AppColors.white,
+        ),
+        backgroundColor: AppColors.primaryColor,
+      ),
       key: _scaffoldKey,
       drawer: MainDrawer(),
       body: Column(
@@ -23,7 +32,7 @@ class _HomePageState extends State<HomePage> {
             margin: const EdgeInsets.only(top: 40.0, left: 20.0),
             alignment: Alignment.topLeft,
             child: IconButton(
-              onPressed: ()=> _scaffoldKey.currentState.openDrawer(),
+              onPressed: () => _scaffoldKey.currentState.openDrawer(),
               icon: Icon(
                 Icons.menu,
                 color: AppColors.black,

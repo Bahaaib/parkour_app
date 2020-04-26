@@ -58,12 +58,31 @@ class AppStrings {
       'facebookHint': 'Type your Facebook URL',
       'twitterHint': 'Type your Twitter URL',
       'saveButtonLabel': 'SAVE',
+      'addPlaceText':'Submit a new place',
+      'titleHint':'Type the place title',
+      'descHint':'Type general info about the place',
+      'placeAddressHint':'Type the place address (Street, Zip code,..etc)',
+      'titleLabel':'Title',
+      'descLabel':'Description',
+      'imagesLabel':'Place images (optional)',
+      'submitButtonLabel':'SUBMIT',
+      'fieldRequiredError':'Field is required'
     },
     CodeStrings.germanCode: {},
   };
 
-  /* Profile */
+  static String get addPlaceText => _sMap[currentCode]["addPlaceText"];
+  static String get titleHint => _sMap[currentCode]["titleHint"];
+  static String get descHint => _sMap[currentCode]["descHint"];
+  static String get placeAddressHint => _sMap[currentCode]["placeAddressHint"];
+  static String get titleLabel => _sMap[currentCode]["titleLabel"];
+  static String get descLabel => _sMap[currentCode]["descLabel"];
+  static String get imagesLabel => _sMap[currentCode]["imagesLabel"];
+  static String get submitButtonLabel => _sMap[currentCode]["submitButtonLabel"];
+  static String get fieldRequiredError => _sMap[currentCode]["fieldRequiredError"];
 
+
+  /* Profile */
   static String get profileText => _sMap[currentCode]["profileText"];
   static String get generalInfoText => _sMap[currentCode]["generalInfoText"];
   static String get socialAccountsText => _sMap[currentCode]["socialAccountsText"];
@@ -228,4 +247,6 @@ class CodeStrings {
   static const String whatsappTag = 'Type your What\'s App Number';
   static const String addressTag = 'address';
   static const String usernameTag = 'username';
+  static const String titleTag = 'title';
+  static const String descriptionTag = 'description';
 }

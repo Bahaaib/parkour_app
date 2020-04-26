@@ -99,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
           _buildRegularField(
               tag: CodeStrings.addressTag,
               controller: _controllers[1],
-              hint: AppStrings.addressLabel,
+              hint: AppStrings.addressHint,
               fieldNode: _addressFocusNode),
         ],
       ),
