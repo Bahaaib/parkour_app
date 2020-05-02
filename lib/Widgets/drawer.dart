@@ -78,7 +78,7 @@ class _MainDrawerState extends State<MainDrawer> {
               menuOption(AppStrings.changePassword,
                   () => navigate(MainRouter.loginPage)),
               menuOption(AppStrings.myContributions,
-                  () => navigate(MainRouter.loginPage)),
+                  () => navigate(MainRouter.contributionsPage)),
               Container(
                 margin: EdgeInsets.only(left: 10, right: 10),
                 child: Divider(),

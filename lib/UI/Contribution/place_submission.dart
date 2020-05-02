@@ -241,4 +241,10 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _streamSubscription.cancel();
+    super.dispose();
+  }
 }

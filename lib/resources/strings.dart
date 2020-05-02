@@ -69,9 +69,13 @@ class AppStrings {
       'fieldRequiredError': 'Field is required',
       'contributionConfirmationMessage':
           'Thanks for your contribution \n Our team will check it carefully very soon',
+      'contributionsText': 'My Contributions'
     },
     CodeStrings.germanCode: {},
   };
+
+  static String get contributionsText =>
+      _sMap[currentCode]["contributionsText"];
 
   static String get contributionConfirmationMessage =>
       _sMap[currentCode]["contributionConfirmationMessage"];
