@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:parkour_app/bloc/contribution/bloc.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -13,6 +15,7 @@ class PlaceSubmissionPage extends StatefulWidget {
 }
 
 class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
+  final ContributionBloc _contributionBloc = GetIt.instance<ContributionBloc>();
   final GlobalKey<FormState> _infoFormKey = GlobalKey();
   final FocusNode _titleFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
@@ -35,8 +38,13 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
                 color: AppColors.white,
               ),
               onPressed: () {
-                if(_infoFormKey.currentState.validate()){
+                if (_infoFormKey.currentState.validate()) {
                   ///TODO: Submit
+                  _contributionBloc.dispatch(ContributionSubmissionRequested(
+                      title: 'title',
+                      description: 'desc',
+                      address: 'address',
+                      imageList: _imageList));
                 }
               })
         ],
@@ -162,7 +170,10 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
                               Icons.add,
                               color: AppColors.offGrey,
                             ),
-                            onPressed: () => _pickImageFromGallery()),
+                            onPressed: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              _pickImageFromGallery();
+                            }),
                       ),
                     )
                   : Container(),
@@ -198,8 +209,13 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
               fontWeight: FontWeight.bold),
         ),
         onPressed: () {
-          if(_infoFormKey.currentState.validate()){
+          if (_infoFormKey.currentState.validate()) {
             ///TODO: Submit
+            _contributionBloc.dispatch(ContributionSubmissionRequested(
+                title: 'title',
+                description: 'desc',
+                address: 'address',
+                imageList: _imageList));
           }
         },
         shape: RoundedRectangleBorder(

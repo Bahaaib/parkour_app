@@ -238,6 +238,7 @@ class CodeStrings {
   static const String databaseDevInstance = "dev";
   static const String databaseProductionInstance = "production";
   static const String usersDatabaseRef = "users";
+  static const String requestsDatabaseRef = "requests";
   static const String resultSignupSuccess = "signup_sucess";
   static const String resultPasswordResetSuccess = "pass_reset_sucess";
   static const String typeSuccess = 'success';

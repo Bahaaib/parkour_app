@@ -1,9 +1,11 @@
 import 'package:parkour_app/bloc/auth/auth_bloc.dart';
+import 'package:parkour_app/bloc/contribution/bloc.dart';
 import 'package:parkour_app/bloc/profile/profile_bloc.dart';
 import 'package:parkour_app/provider/shared_prefrence_provider.dart';
 import 'package:parkour_app/provider/user_provider.dart';
 import 'package:parkour_app/resources/strings.dart';
 import 'package:parkour_app/resources/themes.dart';
+import 'package:parkour_app/support/FileFactory.dart';
 import 'package:parkour_app/support/NetworkProvider/APIManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -42,10 +44,12 @@ class _MyAppState extends State<MyApp> {
   void _initData() {
     GetIt.instance.reset();
 
+    GetIt.instance.registerSingleton<FileFactory>(FileFactory());
     GetIt.instance.registerSingleton<UserProvider>(UserProvider());
     GetIt.instance.registerSingleton<APIManager>(APIManager());
     GetIt.instance.registerSingleton<AuthBloc>(AuthBloc());
     GetIt.instance.registerSingleton<ProfileBloc>(ProfileBloc());
+    GetIt.instance.registerSingleton<ContributionBloc>(ContributionBloc());
 
   }
 
