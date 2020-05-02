@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,7 @@ import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:parkour_app/support/router.gr.dart';
 
 class PlaceSubmissionPage extends StatefulWidget {
   @override
@@ -22,6 +24,19 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
   final FocusNode _addressFocusNode = FocusNode();
 
   List<File> _imageList = List<File>();
+  StreamSubscription _streamSubscription;
+
+  @override
+  void initState() {
+    _streamSubscription =
+        _contributionBloc.contributionSubject.listen((receivedState) {
+      if (receivedState is ContributionIsSubmitted) {
+        MainRouter.navigator
+            .pushNamedAndRemoveUntil(MainRouter.confirmationPage, (_) => false);
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,9 +202,11 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
   Future<void> _pickImageFromGallery() async {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-    setState(() {
-      _imageList.add(image);
-    });
+    if (image != null) {
+      setState(() {
+        _imageList.add(image);
+      });
+    }
   }
 
   Widget _buildSubmitButton() {

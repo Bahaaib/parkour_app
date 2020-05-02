@@ -17,7 +17,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ContributionBloc extends BLoC<ContributionEvent> {
-  PublishSubject contributionSubject = PublishSubject<AuthState>();
+  PublishSubject contributionSubject = PublishSubject<ContributionState>();
   final UserProvider _userProvider = GetIt.instance<UserProvider>();
   final FileFactory _fileFactory = GetIt.instance<FileFactory>();
   final StorageReference storageReference = FirebaseStorage.instance.ref();
@@ -40,12 +40,18 @@ class ContributionBloc extends BLoC<ContributionEvent> {
       @required String address,
       List<File> imageList}) async {
     showLoadingDialog();
-    await _uploadImages(imageList);
+
+    if (imageList != null) {
+      await _uploadImages(imageList);
+    }
 
     print('Files ===> ${_imagesUrlList.length}');
+
     await _submitRequestToDB(
         title: title, description: description, address: address);
-    hideLoadingDialog();
+
+
+    contributionSubject.add(ContributionIsSubmitted());
   }
 
   Future<void> _uploadImages(List<File> images) async {
@@ -75,15 +81,18 @@ class ContributionBloc extends BLoC<ContributionEvent> {
       @required String address}) async {
     Map<String, String> imagesMap = Map<String, String>();
 
-    _imagesUrlList.forEach((url) {
-      imagesMap.putIfAbsent('img${_imagesUrlList.indexOf(url)}', () => url);
-    });
+    if (_imagesUrlList.isNotEmpty) {
+      _imagesUrlList.forEach((url) {
+        imagesMap.putIfAbsent('img${_imagesUrlList.indexOf(url)}', () => url);
+      });
+    }
+
     DatabaseReference ref = FirebaseDatabase.instance
         .reference()
         .child(CodeStrings.databaseDevInstance)
         .child(CodeStrings.requestsDatabaseRef)
         .push();
-    ref.set({
+    await ref.set({
       'user_child_id': _userProvider.user.child_id,
       'child_id': ref.key,
       'title': title,
@@ -91,6 +100,8 @@ class ContributionBloc extends BLoC<ContributionEvent> {
       'address': address,
       'images': imagesMap
     });
+
+    hideLoadingDialog();
   }
 
   void dispose() {

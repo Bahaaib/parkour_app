@@ -13,4 +13,5 @@ class AppColors {
   static final darkGrey = Color(0xFFD8D8D8);
   static final errorColor = Color(0xffDB4437);
   static final red = Color(0xFFF44336);
+  static final green = Color(0xFF66BB6A);
 }

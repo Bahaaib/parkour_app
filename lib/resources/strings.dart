@@ -48,8 +48,8 @@ class AppStrings {
       'cancelLabel': 'Cancel',
       'logoutText': 'Are you sure you want to logout?',
       'profileText': 'Personal info',
-      'generalInfoText':'General info',
-      'socialAccountsText':'Social accounts',
+      'generalInfoText': 'General info',
+      'socialAccountsText': 'Social accounts',
       'usernameLabel': 'Username',
       'addressLabel': 'Address',
       'usernameHint': 'Type your username',
@@ -58,41 +58,66 @@ class AppStrings {
       'facebookHint': 'Type your Facebook URL',
       'twitterHint': 'Type your Twitter URL',
       'saveButtonLabel': 'SAVE',
-      'addPlaceText':'Submit a new place',
-      'titleHint':'Type the place title',
-      'descHint':'Type general info about the place',
-      'placeAddressHint':'Type the place address (Street, Zip code,..etc)',
-      'titleLabel':'Title',
-      'descLabel':'Description',
-      'imagesLabel':'Place images (optional)',
-      'submitButtonLabel':'SUBMIT',
-      'fieldRequiredError':'Field is required'
+      'addPlaceText': 'Submit a new place',
+      'titleHint': 'Type the place title',
+      'descHint': 'Type general info about the place',
+      'placeAddressHint': 'Type the place address (Street, Zip code,..etc)',
+      'titleLabel': 'Title',
+      'descLabel': 'Description',
+      'imagesLabel': 'Place images (optional)',
+      'submitButtonLabel': 'SUBMIT',
+      'fieldRequiredError': 'Field is required',
+      'contributionConfirmationMessage':
+          'Thanks for your contribution \n Our team will check it carefully very soon',
     },
     CodeStrings.germanCode: {},
   };
 
-  static String get addPlaceText => _sMap[currentCode]["addPlaceText"];
-  static String get titleHint => _sMap[currentCode]["titleHint"];
-  static String get descHint => _sMap[currentCode]["descHint"];
-  static String get placeAddressHint => _sMap[currentCode]["placeAddressHint"];
-  static String get titleLabel => _sMap[currentCode]["titleLabel"];
-  static String get descLabel => _sMap[currentCode]["descLabel"];
-  static String get imagesLabel => _sMap[currentCode]["imagesLabel"];
-  static String get submitButtonLabel => _sMap[currentCode]["submitButtonLabel"];
-  static String get fieldRequiredError => _sMap[currentCode]["fieldRequiredError"];
+  static String get contributionConfirmationMessage =>
+      _sMap[currentCode]["contributionConfirmationMessage"];
 
+  static String get addPlaceText => _sMap[currentCode]["addPlaceText"];
+
+  static String get titleHint => _sMap[currentCode]["titleHint"];
+
+  static String get descHint => _sMap[currentCode]["descHint"];
+
+  static String get placeAddressHint => _sMap[currentCode]["placeAddressHint"];
+
+  static String get titleLabel => _sMap[currentCode]["titleLabel"];
+
+  static String get descLabel => _sMap[currentCode]["descLabel"];
+
+  static String get imagesLabel => _sMap[currentCode]["imagesLabel"];
+
+  static String get submitButtonLabel =>
+      _sMap[currentCode]["submitButtonLabel"];
+
+  static String get fieldRequiredError =>
+      _sMap[currentCode]["fieldRequiredError"];
 
   /* Profile */
   static String get profileText => _sMap[currentCode]["profileText"];
+
   static String get generalInfoText => _sMap[currentCode]["generalInfoText"];
-  static String get socialAccountsText => _sMap[currentCode]["socialAccountsText"];
+
+  static String get socialAccountsText =>
+      _sMap[currentCode]["socialAccountsText"];
+
   static String get usernameLabel => _sMap[currentCode]["usernameLabel"];
+
   static String get addressLabel => _sMap[currentCode]["addressLabel"];
+
   static String get usernameHint => _sMap[currentCode]["usernameHint"];
+
   static String get addressHint => _sMap[currentCode]["addressHint"];
+
   static String get whatsappHint => _sMap[currentCode]["whatsappHint"];
+
   static String get facebookHint => _sMap[currentCode]["facebookHint"];
+
   static String get twitterHint => _sMap[currentCode]["twitterHint"];
+
   static String get saveButtonLabel => _sMap[currentCode]["saveButtonLabel"];
 
   /* Home Page */
@@ -230,6 +255,7 @@ class CodeStrings {
   static const String twitterSmallIcon = 'assets/ic_twitter.png';
   static const String facebookSmallIcon = 'assets/ic_facebook.png';
   static const String whatsappSmallIcon = 'assets/ic_whatsapp.png';
+  static const String checkMarkIcon = 'assets/ic_check.png';
 
   /* General */
   static const String confirmPasswordTag = 'confirm';
