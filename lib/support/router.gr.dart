@@ -19,6 +19,7 @@ import 'package:parkour_app/UI/Contribution/confirmation_page.dart';
 import 'package:parkour_app/UI/Contribution/contributions_page.dart';
 import 'package:parkour_app/UI/Contribution/Contribution_details_page.dart';
 import 'package:parkour_app/UI/Contribution/image_zoom_page.dart';
+import 'package:parkour_app/UI/temp_page.dart';
 
 class MainRouter {
   static const splashScreen = '/';
@@ -33,6 +34,7 @@ class MainRouter {
   static const contributionsPage = '/contributions-page';
   static const contributionDetailsPage = '/contribution-details-page';
   static const imageZoomPage = '/image-zoom-page';
+  static const tempPage = '/temp-page';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<MainRouter>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -98,6 +100,11 @@ class MainRouter {
       case MainRouter.imageZoomPage:
         return MaterialPageRoute(
           builder: (_) => ImageZoomPage(),
+          settings: settings,
+        );
+      case MainRouter.tempPage:
+        return MaterialPageRoute(
+          builder: (_) => TempPage(),
           settings: settings,
         );
       default:

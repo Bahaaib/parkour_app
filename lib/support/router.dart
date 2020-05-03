@@ -11,6 +11,7 @@ import 'package:parkour_app/UI/Contribution/place_submission.dart';
 import 'package:parkour_app/UI/Profile/profile_page.dart';
 import 'package:parkour_app/UI/home_page.dart';
 import 'package:parkour_app/UI/splash_screen.dart';
+import 'package:parkour_app/UI/temp_page.dart';
 
 @autoRouter
 class $MainRouter {
@@ -27,4 +28,5 @@ class $MainRouter {
   ContributionsPage contributionsPage;
   ContributionDetailsPage contributionDetailsPage;
   ImageZoomPage imageZoomPage;
+  TempPage tempPage;
 }

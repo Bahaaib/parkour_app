@@ -85,9 +85,9 @@ class _MainDrawerState extends State<MainDrawer> {
               ),
               sectionHeader(AppStrings.general),
               menuOption(AppStrings.privacyPolicy,
-                  () => navigate(MainRouter.loginPage)),
+                  () => navigate(MainRouter.tempPage)),
               menuOption(AppStrings.termsAndConditions,
-                  () => navigate(MainRouter.loginPage)),
+                  () => navigate(MainRouter.tempPage)),
               Container(
                 margin: EdgeInsets.only(left: 10, right: 10),
                 child: Divider(),

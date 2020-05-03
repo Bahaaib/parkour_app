@@ -56,12 +56,17 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Spacer(),
-          Text(
-            '<Map will be shown here>',
-            style: TextStyle(
-                color: Colors.green,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold),
+          Column(
+            children: <Widget>[
+              Icon(Icons.map, size: 50.0, color: AppColors.offGrey,),
+              Text(
+                '<Map will be shown here>',
+                style: TextStyle(
+                    color: AppColors.offGrey,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
           Spacer(),
         ],
@@ -71,7 +76,10 @@ class _HomePageState extends State<HomePage> {
 
   void _checkPassedArguments() {
     final args =
-        ModalRoute.of(context).settings.arguments as Map<String, String>;
+    ModalRoute
+        .of(context)
+        .settings
+        .arguments as Map<String, String>;
     if (args != null) {
       setState(() {
         _result = args['result'];

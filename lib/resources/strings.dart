@@ -12,8 +12,7 @@ class AppStrings {
       'mailLabel': 'E-mail Address',
       'passwordHint': 'Type your password',
       'passwordRequired': 'Password is Required',
-      'passwordInvalidError':
-          'Password should be at least 8 characters that include letters, numbers and special characters',
+      'passwordInvalidError': 'Password should be at least 8 characters',
       'passwordForgot': 'Forgot?',
       'passwordLabel': 'Password',
       'loginText': 'LOG IN',

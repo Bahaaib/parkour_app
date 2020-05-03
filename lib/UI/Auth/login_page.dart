@@ -95,7 +95,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   _buildCredentialsForm(),
                   _buildLoginButton(),
-                  _buildSocialIcons(),
                   _buildRegistrationText()
                 ],
               ),
@@ -168,10 +167,7 @@ class _LoginPageState extends State<LoginPage> {
           if (password.isEmpty) {
             return AppStrings.passwordRequired;
           }
-
-          if (!_isValidPassword(password)) {
-            return AppStrings.passwordInvalidError;
-          }
+          _password = password;
           return null;
         },
         obscureText: _isObscure,
@@ -246,29 +242,6 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isValidEmail(String mail) {
     return EmailValidator.validate(mail);
-  }
-
-  bool _isValidPassword(String password) {
-    RegExp _lettersRegex = RegExp('[a-zA-Z]');
-    RegExp _numbersRegex = RegExp('[0-9]');
-    RegExp _specialCharsRegex = RegExp(r'[_\-=@,\.;!#*&%+()^]+$');
-
-    if (password.length < 8) {
-      return false;
-    }
-    if (!_lettersRegex.hasMatch(password)) {
-      return false;
-    }
-    if (!_numbersRegex.hasMatch(password)) {
-      return false;
-    }
-
-    if (!_specialCharsRegex.hasMatch(password)) {
-      return false;
-    }
-
-    _password = password;
-    return true;
   }
 
   Widget _buildLoginButton() {

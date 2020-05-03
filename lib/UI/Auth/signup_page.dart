@@ -79,7 +79,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   _buildCredentialsForm(),
                   _buildRegistrationButton(),
-                  _buildSocialIcons(),
                   _buildLoginText()
                 ],
               ),
@@ -271,21 +270,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   bool _isValidPassword(String password, String tag) {
-    RegExp _lettersRegex = RegExp('[a-zA-Z]');
-    RegExp _numbersRegex = RegExp('[0-9]');
-    RegExp _specialCharsRegex = RegExp(r'[_\-=@,\.;!#*&%+()^]+$');
-
     if (password.length < 8) {
-      return false;
-    }
-    if (!_lettersRegex.hasMatch(password)) {
-      return false;
-    }
-    if (!_numbersRegex.hasMatch(password)) {
-      return false;
-    }
-
-    if (!_specialCharsRegex.hasMatch(password)) {
       return false;
     }
 
