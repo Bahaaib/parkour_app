@@ -9,12 +9,12 @@ import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
 import 'package:parkour_app/support/router.gr.dart';
 
-class PasswordResetScreen extends StatefulWidget {
+class PasswordResetPage extends StatefulWidget {
   @override
-  _PasswordResetScreenState createState() => _PasswordResetScreenState();
+  _PasswordResetPageState createState() => _PasswordResetPageState();
 }
 
-class _PasswordResetScreenState extends State<PasswordResetScreen> {
+class _PasswordResetPageState extends State<PasswordResetPage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _mail;

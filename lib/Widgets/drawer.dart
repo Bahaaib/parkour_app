@@ -76,7 +76,7 @@ class _MainDrawerState extends State<MainDrawer> {
               menuOption(AppStrings.personalInfo,
                   () => navigate(MainRouter.profilePage)),
               menuOption(AppStrings.changePassword,
-                  () => navigate(MainRouter.loginPage)),
+                  () => navigate(MainRouter.passwordChangePage)),
               menuOption(AppStrings.myContributions,
                   () => navigate(MainRouter.contributionsPage)),
               Container(

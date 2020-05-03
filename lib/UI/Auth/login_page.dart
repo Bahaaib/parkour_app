@@ -199,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           suffix: InkWell(
             onTap: () =>
-                MainRouter.navigator.pushNamed(MainRouter.passwordResetScreen),
+                MainRouter.navigator.pushNamed(MainRouter.passwordResetPage),
             child: Container(
               margin: EdgeInsets.only(left: 10, right: 16),
               child: Text(

@@ -19,8 +19,8 @@ class $MainRouter {
   HomePage homePage;
   LoginPage loginPage;
   SignUpPage signUpPage;
-  PasswordResetScreen passwordResetScreen;
-  PasswordChangeScreen passwordChangeScreen;
+  PasswordResetPage passwordResetPage;
+  PasswordChangePage passwordChangePage;
   ProfilePage profilePage;
   PlaceSubmissionPage placeSubmissionPage;
   ConfirmationPage confirmationPage;

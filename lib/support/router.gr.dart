@@ -25,8 +25,8 @@ class MainRouter {
   static const homePage = '/home-page';
   static const loginPage = '/login-page';
   static const signUpPage = '/sign-up-page';
-  static const passwordResetScreen = '/password-reset-screen';
-  static const passwordChangeScreen = '/password-change-screen';
+  static const passwordResetPage = '/password-reset-page';
+  static const passwordChangePage = '/password-change-page';
   static const profilePage = '/profile-page';
   static const placeSubmissionPage = '/place-submission-page';
   static const confirmationPage = '/confirmation-page';
@@ -60,14 +60,14 @@ class MainRouter {
           builder: (_) => SignUpPage(),
           settings: settings,
         );
-      case MainRouter.passwordResetScreen:
+      case MainRouter.passwordResetPage:
         return MaterialPageRoute(
-          builder: (_) => PasswordResetScreen(),
+          builder: (_) => PasswordResetPage(),
           settings: settings,
         );
-      case MainRouter.passwordChangeScreen:
+      case MainRouter.passwordChangePage:
         return MaterialPageRoute(
-          builder: (_) => PasswordChangeScreen(),
+          builder: (_) => PasswordChangePage(),
           settings: settings,
         );
       case MainRouter.profilePage:

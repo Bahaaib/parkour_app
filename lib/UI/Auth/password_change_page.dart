@@ -4,12 +4,12 @@ import 'package:parkour_app/bloc/auth/auth_bloc.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
 
-class PasswordChangeScreen extends StatefulWidget {
+class PasswordChangePage extends StatefulWidget {
   @override
-  _PasswordChangeScreenState createState() => _PasswordChangeScreenState();
+  _PasswordChangePageState createState() => _PasswordChangePageState();
 }
 
-class _PasswordChangeScreenState extends State<PasswordChangeScreen> {
+class _PasswordChangePageState extends State<PasswordChangePage> {
   AuthBloc _authBloc = GetIt.instance<AuthBloc>();
 
   final FocusNode _oldPasswordNode = FocusNode();
@@ -51,7 +51,7 @@ class _PasswordChangeScreenState extends State<PasswordChangeScreen> {
                 margin: EdgeInsetsDirectional.only(
                     top: 20.0, start: 20.0, end: 20.0),
                 child: Text(
-                  AppStrings.resetLabel,
+                  AppStrings.changePassword,
                   style: TextStyle(
                       color: AppColors.black,
                       fontSize: 30.0,
@@ -203,7 +203,7 @@ class _PasswordChangeScreenState extends State<PasswordChangeScreen> {
       child: RaisedButton(
         color: AppColors.primaryColor,
         child: Text(
-          AppStrings.resetLabel.toUpperCase(),
+          AppStrings.changePassword.toUpperCase(),
           style: TextStyle(
               color: AppColors.white,
               fontSize: 20.0,
