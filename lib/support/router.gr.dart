@@ -12,10 +12,13 @@ import 'package:parkour_app/UI/home_page.dart';
 import 'package:parkour_app/UI/Auth/login_page.dart';
 import 'package:parkour_app/UI/Auth/signup_page.dart';
 import 'package:parkour_app/UI/Auth/reset_password_page.dart';
+import 'package:parkour_app/UI/Auth/password_change_page.dart';
 import 'package:parkour_app/UI/Profile/profile_page.dart';
 import 'package:parkour_app/UI/Contribution/place_submission.dart';
 import 'package:parkour_app/UI/Contribution/confirmation_page.dart';
 import 'package:parkour_app/UI/Contribution/contributions_page.dart';
+import 'package:parkour_app/UI/Contribution/Contribution_details_page.dart';
+import 'package:parkour_app/UI/Contribution/image_zoom_page.dart';
 
 class MainRouter {
   static const splashScreen = '/';
@@ -23,10 +26,13 @@ class MainRouter {
   static const loginPage = '/login-page';
   static const signUpPage = '/sign-up-page';
   static const passwordResetScreen = '/password-reset-screen';
+  static const passwordChangeScreen = '/password-change-screen';
   static const profilePage = '/profile-page';
   static const placeSubmissionPage = '/place-submission-page';
   static const confirmationPage = '/confirmation-page';
   static const contributionsPage = '/contributions-page';
+  static const contributionDetailsPage = '/contribution-details-page';
+  static const imageZoomPage = '/image-zoom-page';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<MainRouter>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -59,6 +65,11 @@ class MainRouter {
           builder: (_) => PasswordResetScreen(),
           settings: settings,
         );
+      case MainRouter.passwordChangeScreen:
+        return MaterialPageRoute(
+          builder: (_) => PasswordChangeScreen(),
+          settings: settings,
+        );
       case MainRouter.profilePage:
         return MaterialPageRoute(
           builder: (_) => ProfilePage(),
@@ -77,6 +88,16 @@ class MainRouter {
       case MainRouter.contributionsPage:
         return MaterialPageRoute(
           builder: (_) => ContributionsPage(),
+          settings: settings,
+        );
+      case MainRouter.contributionDetailsPage:
+        return MaterialPageRoute(
+          builder: (_) => ContributionDetailsPage(),
+          settings: settings,
+        );
+      case MainRouter.imageZoomPage:
+        return MaterialPageRoute(
+          builder: (_) => ImageZoomPage(),
           settings: settings,
         );
       default:

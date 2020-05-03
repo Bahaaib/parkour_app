@@ -69,11 +69,36 @@ class AppStrings {
       'fieldRequiredError': 'Field is required',
       'contributionConfirmationMessage':
           'Thanks for your contribution \n Our team will check it carefully very soon',
-      'contributionsText': 'My Contributions'
+      'contributionsText': 'My Contributions',
+      'aboutText':'About',
+      'dummyDescriptionText':'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      'dummyAddressText':'Ansgarstr. 4, Wallenhorst, 49134',
+      'galleryLabel':'Gallery',
+      'oldPasswordLabel': 'Old Password',
+      'newPasswordLabel': 'New Password',
+      'resetLabel': 'Reset Password',
+      'oldPasswordHint': 'Type your old password',
+      'newPasswordHint': 'Type your new password',
     },
     CodeStrings.germanCode: {},
   };
+  static String get oldPasswordHint => _sMap[currentCode]["oldPasswordHint"];
+  static String get newPasswordHint => _sMap[currentCode]["newPasswordHint"];
+  static String get resetLabel => _sMap[currentCode]["resetLabel"];
+  static String get oldPasswordLabel => _sMap[currentCode]["oldPasswordLabel"];
 
+  static String get newPasswordLabel => _sMap[currentCode]["newPasswordLabel"];
+
+  static String get galleryLabel =>
+      _sMap[currentCode]["galleryLabel"];
+
+  static String get dummyAddressText =>
+      _sMap[currentCode]["dummyAddressText"];
+
+  static String get dummyDescriptionText =>
+      _sMap[currentCode]["dummyDescriptionText"];
+
+  static String get aboutText => _sMap[currentCode]["aboutText"];
   static String get contributionsText =>
       _sMap[currentCode]["contributionsText"];
 
@@ -280,4 +305,6 @@ class CodeStrings {
   static const String usernameTag = 'username';
   static const String titleTag = 'title';
   static const String descriptionTag = 'description';
+  static const String oldPasswordTag = 'old';
+  static const String newPasswordTag = 'new';
 }

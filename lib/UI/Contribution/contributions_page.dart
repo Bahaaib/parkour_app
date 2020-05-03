@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
+import 'package:parkour_app/support/router.gr.dart';
 
 class ContributionsPage extends StatefulWidget {
   @override
@@ -54,7 +55,10 @@ class _ContributionsPageState extends State<ContributionsPage> {
       child: Column(
         children: <Widget>[
           ListTile(
-            onTap: (){},
+            onTap: () => MainRouter.navigator
+                .pushNamed(MainRouter.contributionDetailsPage, arguments: {
+              'result': {'title': title}
+            }),
             contentPadding: EdgeInsets.all(0.0),
             leading: CircleAvatar(
               radius: 50.0,

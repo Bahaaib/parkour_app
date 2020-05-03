@@ -4,4 +4,7 @@ class AppDimens {
   static final double actionElevation = 2.0;
   static final double itemSpace = 16.0;
   static final double screenPadding = 20.0;
+  static final double labelFontSize = 16.0;
+  static final double buttonFontSize = 16.0;
+  static final double buttonHeight = 65;
 }
