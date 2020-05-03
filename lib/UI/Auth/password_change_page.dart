@@ -21,6 +21,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
   final FocusNode _confirmPasswordNode = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey();
 
+  bool _isObscure = true;
   String _newPassword;
   String _confirmationPassword;
   StreamSubscription _streamSubscription;
@@ -146,7 +147,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
           }
           return null;
         },
-        obscureText: true,
+        obscureText: _isObscure,
         onFieldSubmitted: (_) {
           if (destinationNode != null) {
             FocusScope.of(context).requestFocus(destinationNode);
@@ -156,6 +157,24 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
           errorMaxLines: 2,
           hintText: hint,
           hintStyle: TextStyle(color: AppColors.darkGrey),
+          suffixIcon: Container(
+            margin: EdgeInsets.only(left: 10, right: 16),
+            child: IconButton(
+                icon: _isObscure
+                    ? Icon(
+                  Icons.visibility_off,
+                  color: AppColors.offGrey,
+                )
+                    : Icon(
+                  Icons.visibility,
+                  color: AppColors.offGrey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _isObscure = !_isObscure;
+                  });
+                }),
+          ),
         ),
       ),
     );
