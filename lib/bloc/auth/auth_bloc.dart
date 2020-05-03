@@ -43,6 +43,10 @@ class AuthBloc extends BLoC<AuthEvent> {
       await _resetPassword(event.email);
     }
 
+    if(event is UserPasswordChangeRequested){
+      await _changePassword(event.password);
+    }
+
     if (event is UserDataByCachedIdRequested) {
       await _getUserById();
     }
@@ -110,7 +114,6 @@ class AuthBloc extends BLoC<AuthEvent> {
       authSubject.add(UserIsRegisteredWithEmailAndPassword(false));
       hideLoadingDialog();
     });
-
   }
 
   Future<void> _createUserInDatabase(String email, String uid) async {
@@ -119,11 +122,7 @@ class AuthBloc extends BLoC<AuthEvent> {
         .child(CodeStrings.databaseDevInstance)
         .child(CodeStrings.usersDatabaseRef)
         .push();
-    ref.set({
-      'id': uid,
-      'email_address': email,
-      'child_id':ref.key
-    });
+    ref.set({'id': uid, 'email_address': email, 'child_id': ref.key});
   }
 
   Future<void> _addKeyInPreferences(String key) async {
@@ -206,6 +205,18 @@ class AuthBloc extends BLoC<AuthEvent> {
       authSubject.add(PasswordIsReset(true));
     }).catchError((_) {
       authSubject.add(PasswordIsReset(false));
+    });
+  }
+
+  Future<void> _changePassword(String password) async {
+    showLoadingDialog();
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    user.updatePassword(password).then((_) {
+      authSubject.add(PasswordIsChanged());
+      hideLoadingDialog();
+    }).catchError((error) {
+      print(error);
+      hideLoadingDialog();
     });
   }
 

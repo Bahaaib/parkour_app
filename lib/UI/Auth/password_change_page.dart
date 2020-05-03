@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parkour_app/bloc/auth/auth_bloc.dart';
+import 'package:parkour_app/bloc/auth/auth_event.dart';
+import 'package:parkour_app/bloc/auth/auth_state.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
+import 'package:parkour_app/support/router.gr.dart';
 
 class PasswordChangePage extends StatefulWidget {
   @override
@@ -10,19 +15,25 @@ class PasswordChangePage extends StatefulWidget {
 }
 
 class _PasswordChangePageState extends State<PasswordChangePage> {
-  AuthBloc _authBloc = GetIt.instance<AuthBloc>();
+  final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
 
-  final FocusNode _oldPasswordNode = FocusNode();
   final FocusNode _newPasswordNode = FocusNode();
   final FocusNode _confirmPasswordNode = FocusNode();
-  GlobalKey<FormState> _formKey = GlobalKey();
+  final GlobalKey<FormState> _formKey = GlobalKey();
 
-  String _oldPassword;
   String _newPassword;
   String _confirmationPassword;
+  StreamSubscription _streamSubscription;
 
   @override
   void initState() {
+    _streamSubscription = _authBloc.authSubject.listen((receivedState) {
+      if (receivedState is PasswordIsChanged) {
+        MainRouter.navigator.pushNamedAndRemoveUntil(
+            MainRouter.homePage, (_) => false,
+            arguments: {'result': CodeStrings.resultPasswordChangeSuccess});
+      }
+    });
     super.initState();
   }
 
@@ -83,12 +94,6 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _buildTextLabel(AppStrings.oldPasswordLabel),
-          _buildPasswordField(
-              tag: CodeStrings.oldPasswordTag,
-              hint: AppStrings.oldPasswordHint,
-              fieldNode: _oldPasswordNode,
-              destinationNode: _newPasswordNode),
           _buildTextLabel(AppStrings.newPasswordLabel),
           _buildPasswordField(
               tag: CodeStrings.newPasswordTag,
@@ -161,8 +166,6 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
       _confirmationPassword = password;
     } else if (tag == CodeStrings.newPasswordTag) {
       _newPassword = password;
-    } else if (tag == CodeStrings.oldPasswordTag) {
-      _oldPassword = password;
     }
   }
 
@@ -212,6 +215,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
         onPressed: () {
           if (_formKey.currentState.validate()) {
             ///TODO: dispatch password change event
+            _authBloc.dispatch(UserPasswordChangeRequested(_newPassword));
           }
         },
         shape: RoundedRectangleBorder(
@@ -219,5 +223,11 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription.cancel();
+    super.dispose();
   }
 }
