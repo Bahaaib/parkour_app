@@ -46,7 +46,7 @@ class _MainDrawerState extends State<MainDrawer> {
                               .toUpperCase(),
                           style: TextStyle(color: AppColors.white),
                         ),
-                        backgroundColor: AppColors.accentColor,
+                        backgroundColor: AppColors.primaryLightColor,
                       ),
                     ),
                     SizedBox(

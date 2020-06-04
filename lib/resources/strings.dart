@@ -24,7 +24,7 @@ class AppStrings {
       'resendText': 'RESEND OTP',
       'setPasswordText': 'Set Password',
       'passwordInstructions':
-          'Password must be between 8 and 20 characters must include numbers, letters and symbols',
+          'Password must be 8 characters at least',
       'typePasswordHint': 'Type your password',
       'confirmPasswordLabel': 'Confirm Password',
       'confirmPasswordHint': 'Confirm your Password',
@@ -285,7 +285,8 @@ class CodeStrings {
   static const String german = "Deutsch";
 
   /* Assets */
-  static const String appLogo = 'assets/parkour.png';
+  static const String appLogo = 'assets/app_logo.png';
+  static const String splashLogo = 'assets/logo_splash.png';
   static const String googleIcon = 'assets/Google.png';
   static const String facebookIcon = 'assets/facebook.png';
   static const String twitterSmallIcon = 'assets/ic_twitter.png';

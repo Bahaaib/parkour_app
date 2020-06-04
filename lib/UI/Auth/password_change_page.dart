@@ -56,7 +56,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
                 alignment: AlignmentDirectional.center,
@@ -76,7 +76,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
                 child: Text(
                   AppStrings.passwordInstructions,
                   style:
-                      TextStyle(color: AppColors.accentColor, fontSize: 16.0),
+                      TextStyle(color: AppColors.offGrey, fontSize: 16.0),
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parkour_app/bloc/auth/auth_bloc.dart';
 import 'package:parkour_app/bloc/auth/bloc.dart';
+import 'package:parkour_app/resources/colors.dart';
+import 'package:parkour_app/resources/strings.dart';
 import 'package:parkour_app/support/router.gr.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -43,10 +45,16 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryLightColor,
       body: Center(
-        child: Text(
-          'Welcome',
-          style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
+        child: Container(
+          width: 300.0,
+          height: 300.0,
+          child: Image.asset(
+            CodeStrings.splashLogo,
+            color: AppColors.primaryColor,
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );

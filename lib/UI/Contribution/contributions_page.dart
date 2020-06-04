@@ -10,7 +10,7 @@ class ContributionsPage extends StatefulWidget {
 }
 
 class _ContributionsPageState extends State<ContributionsPage> {
-  List<String> _dummyDistances = ['1.5', '10.0', '22.7'];
+  List<String> _dummyDistances = ['1.5', '10', '22.7'];
   List<String> _dummyTitles = [
     'Mat & Richie Parcour Ground',
     'National Parcour Training Centre',
@@ -51,50 +51,50 @@ class _ContributionsPageState extends State<ContributionsPage> {
 
   Widget _buildContributionListItem(
       String distance, String title, String date) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            onTap: () => MainRouter.navigator
-                .pushNamed(MainRouter.contributionDetailsPage, arguments: {
-              'result': {'title': title}
-            }),
-            contentPadding: EdgeInsets.all(0.0),
-            leading: CircleAvatar(
-              radius: 50.0,
-              backgroundColor: AppColors.primaryLightColor,
-              child: Text(
-                distance + '\nKM',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.white, fontSize: 12.0),
+    return Column(
+      children: <Widget>[
+        InkWell(
+          onTap: () => MainRouter.navigator
+              .pushNamed(MainRouter.contributionDetailsPage, arguments: {
+            'result': {'title': title}
+          }),
+          child: Container(
+            padding: EdgeInsets.only(right: 20.0),
+            child: ListTile(
+              contentPadding: EdgeInsets.all(0.0),
+              leading: CircleAvatar(
+                radius: 50.0,
+                backgroundColor: AppColors.primaryLightColor,
+                child: Text(
+                  distance + '\nKM',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: AppColors.white, fontSize: 12.0),
+                ),
               ),
-            ),
-            title: Container(
-              padding: EdgeInsets.only(right: 40.0),
-              child: Align(
+              title: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   title,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-            ),
-            subtitle: Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                child: Text(
-                  date,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14.0, color: AppColors.offGrey),
+              subtitle: Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  child: Text(
+                    date,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14.0, color: AppColors.offGrey),
+                  ),
                 ),
               ),
             ),
           ),
-          Divider()
-        ],
-      ),
+        ),
+        Divider()
+      ],
     );
   }
 }

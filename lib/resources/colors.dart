@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   ///TODO: Change App color according to design
-  static final primaryColor = Color(0xffff5252);
-  static final primaryLightColor = Color(0xffff867f);
-  static final primaryDarkColor = Color(0xffc50e29);
-  static final accentColor = Color(0xFFbdbdbd);
+  static final primaryColor = Color(0xffcc7822);
+  static final primaryLightColor = Color(0xffffa752);
+  static final primaryDarkColor = Color(0xff964b00);
+  static final accentColor = Color(0xFF8746ff);
   static final black = Color(0xff000000);
   static final white = Color(0xffffffff);
   static final offGrey = Color(0xff8B8B8B);
