@@ -30,7 +30,9 @@ class ContributionBloc extends BLoC<ContributionEvent> {
           title: event.title,
           description: event.description,
           address: event.address,
-          imageList: event.imageList);
+          imageList: event.imageList,
+          latitude: event.latitude,
+          longitude: event.longitude);
     }
   }
 
@@ -38,7 +40,9 @@ class ContributionBloc extends BLoC<ContributionEvent> {
       {@required String title,
       @required String description,
       @required String address,
-      List<File> imageList}) async {
+      List<File> imageList,
+      @required double latitude,
+      @required double longitude}) async {
     showLoadingDialog();
 
     if (imageList != null) {
@@ -48,8 +52,11 @@ class ContributionBloc extends BLoC<ContributionEvent> {
     print('Files ===> ${_imagesUrlList.length}');
 
     await _submitRequestToDB(
-        title: title, description: description, address: address);
-
+        title: title,
+        description: description,
+        address: address,
+        latitude: latitude,
+        longitude: longitude);
 
     contributionSubject.add(ContributionIsSubmitted());
   }
@@ -78,7 +85,9 @@ class ContributionBloc extends BLoC<ContributionEvent> {
   Future<void> _submitRequestToDB(
       {@required String title,
       @required String description,
-      @required String address}) async {
+      @required String address,
+      @required double latitude,
+      @required double longitude}) async {
     Map<String, String> imagesMap = Map<String, String>();
 
     if (_imagesUrlList.isNotEmpty) {
@@ -98,7 +107,9 @@ class ContributionBloc extends BLoC<ContributionEvent> {
       'title': title,
       'description': description,
       'address': address,
-      'images': imagesMap
+      'images': imagesMap,
+      'latitude': latitude,
+      'longitude': longitude
     });
 
     hideLoadingDialog();

@@ -23,8 +23,7 @@ class AppStrings {
       'signupLabel': 'SIGN UP',
       'resendText': 'RESEND OTP',
       'setPasswordText': 'Set Password',
-      'passwordInstructions':
-          'Password must be 8 characters at least',
+      'passwordInstructions': 'Password must be 8 characters at least',
       'typePasswordHint': 'Type your password',
       'confirmPasswordLabel': 'Confirm Password',
       'confirmPasswordHint': 'Confirm your Password',
@@ -79,10 +78,17 @@ class AppStrings {
       'resetLabel': 'Reset Password',
       'oldPasswordHint': 'Type your old password',
       'newPasswordHint': 'Type your new password',
-      'passwordChangedMessage': 'Password has been changed successfully'
+      'passwordChangedMessage': 'Password has been changed successfully',
+      'locationHint':
+          'Hint: Use the map controllers to zoom in/out till you find your correct location. Then long press on it till the red marker appears',
+      'locationLabel': 'Pick Parcour Location'
     },
     CodeStrings.germanCode: {},
   };
+
+  static String get locationHint => _sMap[currentCode]["locationHint"];
+
+  static String get locationLabel => _sMap[currentCode]["locationLabel"];
 
   static String get passwordChangedMessage =>
       _sMap[currentCode]["passwordChangedMessage"];

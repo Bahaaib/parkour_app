@@ -9,6 +9,11 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Parcour 3D Tracking"
         android:icon="@mipmap/app_logo">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAtuQ9DbGTfz81j288BkUGRsNxrKu7zSuo" />
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

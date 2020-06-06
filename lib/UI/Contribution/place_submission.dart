@@ -2,14 +2,19 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parkour_app/bloc/contribution/bloc.dart';
+import 'package:parkour_app/provider/location_provider.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:parkour_app/support/router.gr.dart';
+import 'package:location/location.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PlaceSubmissionPage extends StatefulWidget {
   @override
@@ -25,6 +30,16 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
 
   List<File> _imageList = List<File>();
   StreamSubscription _streamSubscription;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  Completer<GoogleMapController> _controller = Completer();
+  final LocationProvider _locationProvider = GetIt.instance<LocationProvider>();
+  Map<MarkerId, Marker> markers = Map<MarkerId, Marker>();
+  double _latitude;
+  double _longitude;
+
+  //Default initial Position [Center of Germany]
+  CameraPosition _currentPosition =
+      CameraPosition(target: LatLng(51.3016091, 9.9586623), zoom: 15);
 
   @override
   void initState() {
@@ -41,6 +56,7 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(AppStrings.addPlaceText),
         leading: IconButton(
@@ -54,12 +70,19 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
               ),
               onPressed: () {
                 if (_infoFormKey.currentState.validate()) {
-                  ///TODO: Submit
-                  _contributionBloc.dispatch(ContributionSubmissionRequested(
-                      title: 'title',
-                      description: 'desc',
-                      address: 'address',
-                      imageList: _imageList));
+                  if (_isLocationPicked()) {
+                    ///TODO: Submit
+                    _contributionBloc.dispatch(ContributionSubmissionRequested(
+                        title: 'title',
+                        description: 'desc',
+                        address: 'address',
+                        imageList: _imageList,
+                        latitude: _latitude,
+                        longitude: _longitude));
+                  } else {
+                    _showSnackBar('Parcour location MUST be picked on map',
+                        CodeStrings.typeError);
+                  }
                 }
               })
         ],
@@ -71,7 +94,8 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
             children: <Widget>[
               _buildInfoForm(),
               _buildGallerySection(),
-              _buildSubmitButton()
+              _buildLocationPicker(),
+              _buildSubmitButton(),
             ],
           ),
         ),
@@ -151,6 +175,19 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
     );
   }
 
+  Widget _buildTextHint(String label,
+      {double topMargin = 20.0,
+      double fontSize = 16.0,
+      Color textColor = const Color(0xff000000)}) {
+    return Container(
+      margin: EdgeInsetsDirectional.only(start: 20, end: 20, top: topMargin),
+      child: Text(
+        label,
+        style: TextStyle(fontSize: fontSize, color: textColor),
+      ),
+    );
+  }
+
   Widget _buildGallerySection() {
     return Container(
       alignment: Alignment.centerLeft,
@@ -199,6 +236,52 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
     );
   }
 
+  Widget _buildLocationPicker() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildTextLabel(AppStrings.locationLabel),
+          _buildTextHint(AppStrings.locationHint,
+              fontSize: 14.0, textColor: AppColors.offGrey),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 400.0,
+            margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+            child: GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: _currentPosition,
+              onMapCreated: (GoogleMapController controller) async {
+                _controller.complete(controller);
+                LocationData _locationData =
+                    await _locationProvider.getCurrentLocation();
+
+                _currentPosition = CameraPosition(
+                    target:
+                        LatLng(_locationData.latitude, _locationData.longitude),
+                    zoom: 15);
+                _goToCurrentPosition();
+              },
+              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+                new Factory<OneSequenceGestureRecognizer>(
+                  () => new EagerGestureRecognizer(),
+                ),
+              ].toSet(),
+              onLongPress: (latlng) {
+                _addMarkerLongPressed(latlng);
+                _latitude = latlng.latitude;
+                _longitude = latlng.longitude;
+              },
+              markers: Set<Marker>.of(markers.values),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Future<void> _pickImageFromGallery() async {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
@@ -227,16 +310,83 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
         ),
         onPressed: () {
           if (_infoFormKey.currentState.validate()) {
-            ///TODO: Submit
-            _contributionBloc.dispatch(ContributionSubmissionRequested(
-                title: 'title',
-                description: 'desc',
-                address: 'address',
-                imageList: _imageList));
+            if (_isLocationPicked()) {
+              ///TODO: Submit
+              print('SENDING...: ${_latitude}');
+              _contributionBloc.dispatch(ContributionSubmissionRequested(
+                  title: 'title',
+                  description: 'desc',
+                  address: 'address',
+                  imageList: _imageList,
+                  latitude: _latitude,
+                  longitude: _longitude));
+            } else {
+              _showSnackBar('Parcour location MUST be picked on map',
+                  CodeStrings.typeError);
+            }
           }
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
+        ),
+      ),
+    );
+  }
+
+  bool _isLocationPicked() {
+    return _latitude != null && _longitude != null;
+  }
+
+  Future<void> _goToCurrentPosition() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_currentPosition));
+  }
+
+  Future _addMarkerLongPressed(LatLng latlng) async {
+    setState(() {
+      final MarkerId markerId = MarkerId("RANDOM_ID");
+      Marker marker = Marker(
+        markerId: markerId,
+        draggable: true,
+        position: latlng,
+        //With this parameter you automatically obtain latitude and longitude
+        infoWindow: InfoWindow(
+          title: "Selected Parcour Location",
+        ),
+        icon: BitmapDescriptor.defaultMarker,
+      );
+
+      markers[markerId] = marker;
+    });
+
+    //This is optional, it will zoom when the marker has been created
+    GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newLatLngZoom(latlng, 15.0));
+  }
+
+  void _showSnackBar(String message, String type) {
+    _scaffoldKey.currentState.showSnackBar(
+      new SnackBar(
+        content: Row(
+          children: <Widget>[
+            Icon(
+                type == CodeStrings.typeError
+                    ? Icons.warning
+                    : Icons.check_circle,
+                color: type == CodeStrings.typeError
+                    ? AppColors.errorColor
+                    : Colors.lightGreen),
+            SizedBox(
+              width: 8.0,
+            ),
+            Text(
+              message,
+              style: TextStyle(
+                  color: type == CodeStrings.typeError
+                      ? AppColors.errorColor
+                      : Colors.lightGreen),
+            ),
+          ],
         ),
       ),
     );

@@ -9,10 +9,14 @@ class ContributionSubmissionRequested extends ContributionEvent {
   final String description;
   final String address;
   final List<File> imageList;
+  final double latitude;
+  final double longitude;
 
   ContributionSubmissionRequested(
       {@required this.title,
       @required this.description,
       @required this.address,
-      this.imageList});
+      this.imageList,
+      @required this.latitude,
+      @required this.longitude});
 }
