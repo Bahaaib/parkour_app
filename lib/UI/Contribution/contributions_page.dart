@@ -1,5 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:parkour_app/PODO/Contribution.dart';
+import 'package:parkour_app/bloc/contribution/bloc.dart';
+import 'package:parkour_app/bloc/contribution/contribution_bloc.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
 import 'package:parkour_app/support/router.gr.dart';
@@ -10,17 +16,24 @@ class ContributionsPage extends StatefulWidget {
 }
 
 class _ContributionsPageState extends State<ContributionsPage> {
-  List<String> _dummyDistances = ['1.5', '10', '22.7'];
-  List<String> _dummyTitles = [
-    'Mat & Richie Parcour Ground',
-    'National Parcour Training Centre',
-    'Matthias Open Ground for Parcour Training'
-  ];
-  List<String> _dummyDates = [
-    'April 27, 2020',
-    'May 01, 2020',
-    'April 12, 2020'
-  ];
+  final ContributionBloc _contributionsBloc =
+      GetIt.instance<ContributionBloc>();
+  final List<Contribution> _contributions = List<Contribution>();
+  StreamSubscription _streamSubscription;
+
+  @override
+  void initState() {
+   _streamSubscription =  _contributionsBloc.contributionSubject.listen((receivedState) {
+      if (receivedState is ContributionsAreFetched) {
+        setState(() {
+          _contributions.clear();
+          _contributions.addAll(receivedState.contributions);
+        });
+      }
+    });
+    _contributionsBloc.dispatch(ContributionsRequested());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,29 +47,31 @@ class _ContributionsPageState extends State<ContributionsPage> {
       body: Column(
         children: <Widget>[
           Expanded(
-            child: Container(
-              margin: EdgeInsets.only(top: 10.0),
-              child: ListView.builder(
-                itemCount: 3,
-                itemBuilder: (BuildContext context, int position) =>
-                    _buildContributionListItem(_dummyDistances[position],
-                        _dummyTitles[position], _dummyDates[position]),
-              ),
-            ),
+            child: _contributions.isNotEmpty
+                ? Container(
+                    margin: EdgeInsets.only(top: 10.0),
+                    child: ListView.builder(
+                      itemCount: _contributions.length,
+                      itemBuilder: (BuildContext context, int position) =>
+                          _buildContributionListItem(
+                        _contributions[position],
+                      ),
+                    ),
+                  )
+                : Container(),
           )
         ],
       ),
     );
   }
 
-  Widget _buildContributionListItem(
-      String distance, String title, String date) {
+  Widget _buildContributionListItem(Contribution contribution) {
     return Column(
       children: <Widget>[
         InkWell(
           onTap: () => MainRouter.navigator
               .pushNamed(MainRouter.contributionDetailsPage, arguments: {
-            'result': {'title': title}
+            'result': {'contribution': contribution}
           }),
           child: Container(
             padding: EdgeInsets.only(right: 20.0),
@@ -66,7 +81,8 @@ class _ContributionsPageState extends State<ContributionsPage> {
                 radius: 50.0,
                 backgroundColor: AppColors.primaryLightColor,
                 child: Text(
-                  distance + '\nKM',
+                  contribution.distanceToCurrentLocation.toStringAsFixed(2) +
+                      '\nKM',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: AppColors.white, fontSize: 12.0),
                 ),
@@ -74,7 +90,7 @@ class _ContributionsPageState extends State<ContributionsPage> {
               title: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  title,
+                  contribution.title,
                   textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   overflow: TextOverflow.ellipsis,
@@ -84,7 +100,7 @@ class _ContributionsPageState extends State<ContributionsPage> {
                 alignment: Alignment.centerLeft,
                 child: Container(
                   child: Text(
-                    date,
+                    contribution.submission_date,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14.0, color: AppColors.offGrey),
                   ),
@@ -96,5 +112,11 @@ class _ContributionsPageState extends State<ContributionsPage> {
         Divider()
       ],
     );
+  }
+
+  @override
+  void dispose() {
+   _streamSubscription.cancel();
+    super.dispose();
   }
 }

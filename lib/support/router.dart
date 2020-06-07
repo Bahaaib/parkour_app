@@ -6,7 +6,6 @@ import 'package:parkour_app/UI/Auth/signup_page.dart';
 import 'package:parkour_app/UI/Contribution/Contribution_details_page.dart';
 import 'package:parkour_app/UI/Contribution/confirmation_page.dart';
 import 'package:parkour_app/UI/Contribution/contributions_page.dart';
-import 'package:parkour_app/UI/Contribution/image_zoom_page.dart';
 import 'package:parkour_app/UI/Contribution/place_submission.dart';
 import 'package:parkour_app/UI/Profile/profile_page.dart';
 import 'package:parkour_app/UI/home_page.dart';
@@ -27,6 +26,5 @@ class $MainRouter {
   ConfirmationPage confirmationPage;
   ContributionsPage contributionsPage;
   ContributionDetailsPage contributionDetailsPage;
-  ImageZoomPage imageZoomPage;
   TempPage tempPage;
 }

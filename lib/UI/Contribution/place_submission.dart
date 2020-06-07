@@ -72,7 +72,7 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
                 if (_infoFormKey.currentState.validate()) {
                   if (_isLocationPicked()) {
                     ///TODO: Submit
-                    _contributionBloc.dispatch(ContributionSubmissionRequested(
+                    _contributionBloc.dispatch(RequestSubmissionRequested(
                         title: 'title',
                         description: 'desc',
                         address: 'address',
@@ -312,8 +312,7 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
           if (_infoFormKey.currentState.validate()) {
             if (_isLocationPicked()) {
               ///TODO: Submit
-              print('SENDING...: ${_latitude}');
-              _contributionBloc.dispatch(ContributionSubmissionRequested(
+              _contributionBloc.dispatch(RequestSubmissionRequested(
                   title: 'title',
                   description: 'desc',
                   address: 'address',
@@ -342,7 +341,7 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
     controller.animateCamera(CameraUpdate.newCameraPosition(_currentPosition));
   }
 
-  Future _addMarkerLongPressed(LatLng latlng) async {
+  Future<void> _addMarkerLongPressed(LatLng latlng) async {
     setState(() {
       final MarkerId markerId = MarkerId("RANDOM_ID");
       Marker marker = Marker(

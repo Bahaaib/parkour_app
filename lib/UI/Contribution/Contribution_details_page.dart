@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parkour_app/PODO/Contribution.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
 
@@ -9,7 +10,7 @@ class ContributionDetailsPage extends StatefulWidget {
 }
 
 class _ContributionDetailsPageState extends State<ContributionDetailsPage> {
-  String _title;
+  Contribution _contribution;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,9 @@ class _ContributionDetailsPageState extends State<ContributionDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: _title != null ? Text(_title) : Container(),
+        title: _contribution.title != null
+            ? Text(_contribution.title)
+            : Container(),
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.pop(context)),
@@ -27,10 +30,12 @@ class _ContributionDetailsPageState extends State<ContributionDetailsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildTextLabel(AppStrings.aboutText, topMargin: 30.0),
-            _buildDummyText(AppStrings.dummyDescriptionText),
+            _buildDummyText(_contribution.description),
             _buildTextLabel(AppStrings.addressLabel, topMargin: 30.0),
-            _buildDummyText(AppStrings.dummyAddressText),
-            _buildTextLabel(AppStrings.galleryLabel, topMargin: 30.0),
+            _buildDummyText(_contribution.address),
+            _contribution.images != null
+                ? _buildTextLabel(AppStrings.galleryLabel, topMargin: 30.0)
+                : Container(),
             _buildImagesGallery()
           ],
         ),
@@ -39,29 +44,31 @@ class _ContributionDetailsPageState extends State<ContributionDetailsPage> {
   }
 
   Widget _buildImagesGallery() {
-    return Container(
-      height: 400.0,
-      margin: EdgeInsetsDirectional.only(
-          start: 20, end: 20, top: 20.0, bottom: 20.0),
-      child: GridView.builder(
-          itemCount: 5,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1.5,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0),
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.offGrey),
-              ),
-              child: Image.asset(
-                'assets/images/img_${index + 1}.jpg',
-                fit: BoxFit.cover,
-              ),
-            );
-          }),
-    );
+    return _contribution.images != null
+        ? Container(
+            height: 400.0,
+            margin: EdgeInsetsDirectional.only(
+                start: 20, end: 20, top: 20.0, bottom: 20.0),
+            child: GridView.builder(
+                itemCount: _contribution.images.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1.5,
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0),
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.offGrey),
+                    ),
+                    child: Image.network(
+                      _contribution.images[index],
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                }),
+          )
+        : Container();
   }
 
   Widget _buildDummyText(String dummyText) {
@@ -89,13 +96,13 @@ class _ContributionDetailsPageState extends State<ContributionDetailsPage> {
   }
 
   void _checkPassedArguments() {
-    Map<String, String> result;
+    Map<String, Contribution> result;
     final args = ModalRoute.of(context).settings.arguments
-        as Map<String, Map<String, String>>;
+        as Map<String, Map<String, Contribution>>;
     if (args != null) {
       setState(() {
         result = args['result'];
-        _title = result['title'];
+        _contribution = result['contribution'];
       });
     }
   }

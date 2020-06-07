@@ -1,11 +1,11 @@
 import 'package:location/location.dart';
 
 class LocationProvider {
-  Location location = new Location();
+  Location location = Location();
 
   bool _serviceEnabled;
   PermissionStatus _permissionGranted;
-  LocationData _locationData;
+  LocationData locationData;
 
   Future<void> checkForLocationPermission() async {
     _serviceEnabled = await location.serviceEnabled();
@@ -24,12 +24,12 @@ class LocationProvider {
       }
     }
 
-    _locationData = await location.getLocation();
+    locationData = await location.getLocation();
 
     print(
-        '=============== LATITUDE: ${_locationData.latitude} ===============');
+        '=============== LATITUDE: ${locationData.latitude} ===============');
     print(
-        '=============== LONGITUDE: ${_locationData.longitude} ===============');
+        '=============== LONGITUDE: ${locationData.longitude} ===============');
   }
 
   Future<LocationData> getCurrentLocation() async {

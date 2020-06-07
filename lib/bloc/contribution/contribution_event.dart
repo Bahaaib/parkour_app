@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 abstract class ContributionEvent {}
 
-class ContributionSubmissionRequested extends ContributionEvent {
+class RequestSubmissionRequested extends ContributionEvent {
   final String title;
   final String description;
   final String address;
@@ -12,11 +12,15 @@ class ContributionSubmissionRequested extends ContributionEvent {
   final double latitude;
   final double longitude;
 
-  ContributionSubmissionRequested(
+  RequestSubmissionRequested(
       {@required this.title,
       @required this.description,
       @required this.address,
       this.imageList,
       @required this.latitude,
       @required this.longitude});
+}
+
+class ContributionsRequested extends ContributionEvent{
+
 }

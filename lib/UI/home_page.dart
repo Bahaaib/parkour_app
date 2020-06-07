@@ -3,7 +3,11 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:parkour_app/PODO/Contribution.dart';
 import 'package:parkour_app/Widgets/drawer.dart';
+import 'package:parkour_app/bloc/contribution/contribution_bloc.dart';
+import 'package:parkour_app/bloc/contribution/contribution_event.dart';
+import 'package:parkour_app/bloc/contribution/contribution_state.dart';
 import 'package:parkour_app/provider/location_provider.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
@@ -20,12 +24,17 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _controller = Completer();
   final LocationProvider _locationProvider = GetIt.instance<LocationProvider>();
+  final ContributionBloc _contributionsBloc =
+      GetIt.instance<ContributionBloc>();
+  final List<Contribution> _contributions = List<Contribution>();
+  Map<MarkerId, Marker> markers = Map<MarkerId, Marker>();
+  StreamSubscription _streamSubscription;
 
   String _result;
 
   //Default initial Position [Center of Germany]
-  CameraPosition _currentPosition = CameraPosition(
-      target: LatLng(51.3016091,9.9586623), zoom: 15);
+  CameraPosition _currentPosition =
+      CameraPosition(target: LatLng(51.3016091, 9.9586623), zoom: 15);
 
   @override
   void initState() {
@@ -35,13 +44,34 @@ class _HomePageState extends State<HomePage> {
             AppStrings.passwordChangedMessage, CodeStrings.typeSuccess);
       }
     });
+
+    _streamSubscription =
+        _contributionsBloc.contributionSubject.listen((receivedState) {
+      if (receivedState is ContributionsAreFetched) {
+        setState(() {
+          _contributions.clear();
+          _contributions.addAll(receivedState.contributions);
+          print('CONTRIBUTIONS COUNT = ${_contributions.length}');
+        });
+      }
+
+      for (Contribution contribution in _contributions) {
+        _addMarkersOnMap(LatLng(contribution.latitude, contribution.longitude),
+            contribution.title);
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    _locationProvider.checkForLocationPermission();
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     _checkPassedArguments();
-    _locationProvider.checkForLocationPermission();
 
     return Scaffold(
         floatingActionButton: FloatingActionButton(
@@ -61,15 +91,18 @@ class _HomePageState extends State<HomePage> {
             GoogleMap(
               mapType: MapType.normal,
               initialCameraPosition: _currentPosition,
-              onMapCreated: (GoogleMapController controller) async{
+              onMapCreated: (GoogleMapController controller) async {
                 _controller.complete(controller);
-                LocationData _locationData = await _locationProvider.getCurrentLocation();
+                LocationData _locationData =
+                    await _locationProvider.getCurrentLocation();
 
                 _currentPosition = CameraPosition(
-                    target: LatLng(_locationData.latitude, _locationData.longitude),
+                    target:
+                        LatLng(_locationData.latitude, _locationData.longitude),
                     zoom: 15);
                 _goToCurrentPosition();
               },
+              markers: Set<Marker>.of(markers.values),
             ),
             Container(
               margin: const EdgeInsets.only(top: 40.0, left: 20.0),
@@ -91,6 +124,7 @@ class _HomePageState extends State<HomePage> {
     print('PLAYING POSITION: ${_currentPosition.target.latitude}');
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_currentPosition));
+    _contributionsBloc.dispatch(ContributionsRequested());
   }
 
   void _checkPassedArguments() {
@@ -101,6 +135,24 @@ class _HomePageState extends State<HomePage> {
         _result = args['result'];
       });
     }
+  }
+
+  Future<void> _addMarkersOnMap(LatLng latlng, String title) async {
+    setState(() {
+      final MarkerId markerId = MarkerId(DateTime.now().toIso8601String());
+      Marker marker = Marker(
+        markerId: markerId,
+        draggable: false,
+        position: latlng,
+        //With this parameter you automatically obtain latitude and longitude
+        infoWindow: InfoWindow(
+          title: title,
+        ),
+        icon: BitmapDescriptor.defaultMarker,
+      );
+
+      markers[markerId] = marker;
+    });
   }
 
   void _showSnackBar(String message, String type) {
@@ -129,5 +181,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription.cancel();
+    super.dispose();
   }
 }

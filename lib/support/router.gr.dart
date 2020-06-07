@@ -18,7 +18,6 @@ import 'package:parkour_app/UI/Contribution/place_submission.dart';
 import 'package:parkour_app/UI/Contribution/confirmation_page.dart';
 import 'package:parkour_app/UI/Contribution/contributions_page.dart';
 import 'package:parkour_app/UI/Contribution/Contribution_details_page.dart';
-import 'package:parkour_app/UI/Contribution/image_zoom_page.dart';
 import 'package:parkour_app/UI/temp_page.dart';
 
 class MainRouter {
@@ -33,7 +32,6 @@ class MainRouter {
   static const confirmationPage = '/confirmation-page';
   static const contributionsPage = '/contributions-page';
   static const contributionDetailsPage = '/contribution-details-page';
-  static const imageZoomPage = '/image-zoom-page';
   static const tempPage = '/temp-page';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<MainRouter>();
@@ -95,11 +93,6 @@ class MainRouter {
       case MainRouter.contributionDetailsPage:
         return MaterialPageRoute(
           builder: (_) => ContributionDetailsPage(),
-          settings: settings,
-        );
-      case MainRouter.imageZoomPage:
-        return MaterialPageRoute(
-          builder: (_) => ImageZoomPage(),
           settings: settings,
         );
       case MainRouter.tempPage:
