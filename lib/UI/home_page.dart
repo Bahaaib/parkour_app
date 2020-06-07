@@ -149,6 +149,9 @@ class _HomePageState extends State<HomePage> {
           title: title,
         ),
         icon: BitmapDescriptor.defaultMarker,
+        onTap: (){
+          //TODO: Open Details page for that marker position
+        }
       );
 
       markers[markerId] = marker;

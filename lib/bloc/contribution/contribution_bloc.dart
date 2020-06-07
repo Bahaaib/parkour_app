@@ -45,12 +45,13 @@ class ContributionBloc extends BLoC<ContributionEvent> {
     }
   }
 
-  Future<void> _submitContribution({@required String title,
-    @required String description,
-    @required String address,
-    List<File> imageList,
-    @required double latitude,
-    @required double longitude}) async {
+  Future<void> _submitContribution(
+      {@required String title,
+      @required String description,
+      @required String address,
+      List<File> imageList,
+      @required double latitude,
+      @required double longitude}) async {
     showLoadingDialog();
 
     if (imageList != null) {
@@ -76,7 +77,7 @@ class ContributionBloc extends BLoC<ContributionEvent> {
       StorageUploadTask uploadTask = storageReference
           .child(storagePath + '${basename(image.path)}')
           .putFile(
-          await _fileFactory.compressImageAndGetFile(image, quality: 20));
+              await _fileFactory.compressImageAndGetFile(image, quality: 20));
       await uploadTask.onComplete;
 
       print('File Uploaded');
@@ -90,11 +91,12 @@ class ContributionBloc extends BLoC<ContributionEvent> {
     }
   }
 
-  Future<void> _submitRequestToDB({@required String title,
-    @required String description,
-    @required String address,
-    @required double latitude,
-    @required double longitude}) async {
+  Future<void> _submitRequestToDB(
+      {@required String title,
+      @required String description,
+      @required String address,
+      @required double latitude,
+      @required double longitude}) async {
     Map<String, String> imagesMap = Map<String, String>();
 
     if (_imagesUrlList.isNotEmpty) {
@@ -137,15 +139,17 @@ class ContributionBloc extends BLoC<ContributionEvent> {
       children = datasnapshot.value;
       children.forEach((key, value) async {
         Contribution contribution =
-        Contribution.fromFirebase(firebaseMap: value);
-        contribution.distanceToCurrentLocation =
-            _getDistanceToCurrentLocation(
-                contribution.latitude, contribution.longitude);
+            Contribution.fromFirebase(firebaseMap: value);
 
-        print(
-            '============> DIST: ${ _getDistanceToCurrentLocation(
-                contribution.latitude, contribution.longitude)}');
-        contributions.add(contribution);
+        if (contribution.user_child_id == _userProvider.user.child_id) {
+          contribution.distanceToCurrentLocation =
+              _getDistanceToCurrentLocation(
+                  contribution.latitude, contribution.longitude);
+
+          print(
+              '============> DIST: ${_getDistanceToCurrentLocation(contribution.latitude, contribution.longitude)}');
+          contributions.add(contribution);
+        }
       });
       contributionSubject.add(ContributionsAreFetched(contributions));
     });
