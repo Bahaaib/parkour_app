@@ -151,6 +151,7 @@ class _HomePageState extends State<HomePage> {
         icon: BitmapDescriptor.defaultMarker,
         onTap: (){
           //TODO: Open Details page for that marker position
+          _contributionsBloc.dispatch(ContributionSelected(latlng.latitude, latlng.longitude));
         }
       );
 

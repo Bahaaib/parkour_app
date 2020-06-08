@@ -21,6 +21,11 @@ class RequestSubmissionRequested extends ContributionEvent {
       @required this.longitude});
 }
 
-class ContributionsRequested extends ContributionEvent{
+class ContributionsRequested extends ContributionEvent {}
 
+class ContributionSelected extends ContributionEvent {
+  final double latitude;
+  final double longitude;
+
+  ContributionSelected(this.latitude, this.longitude);
 }

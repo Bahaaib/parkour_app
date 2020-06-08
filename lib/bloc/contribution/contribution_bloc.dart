@@ -11,6 +11,7 @@ import 'package:parkour_app/provider/location_provider.dart';
 import 'package:parkour_app/provider/user_provider.dart';
 import 'package:parkour_app/resources/strings.dart';
 import 'package:parkour_app/support/FileFactory.dart';
+import 'package:parkour_app/support/router.gr.dart';
 import 'package:path/path.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -25,6 +26,7 @@ class ContributionBloc extends BLoC<ContributionEvent> {
   final LocationProvider _locationProvider = GetIt.instance<LocationProvider>();
   final StorageReference storageReference = FirebaseStorage.instance.ref();
   final List<String> _imagesUrlList = List<String>();
+  final List<Contribution> _allContributions = List<Contribution>();
   double currentLatitude;
   double currentLongitude;
 
@@ -42,6 +44,10 @@ class ContributionBloc extends BLoC<ContributionEvent> {
 
     if (event is ContributionsRequested) {
       await _getAllContributions();
+    }
+
+    if (event is ContributionSelected) {
+      _getContributionByLocation(event.latitude, event.longitude);
     }
   }
 
@@ -129,6 +135,7 @@ class ContributionBloc extends BLoC<ContributionEvent> {
     await _getCurrentLocation();
     Map<dynamic, dynamic> children = {};
     List<Contribution> contributions = [];
+    _allContributions.clear();
     DatabaseReference ref = FirebaseDatabase.instance.reference();
 
     ref
@@ -141,6 +148,9 @@ class ContributionBloc extends BLoC<ContributionEvent> {
         Contribution contribution =
             Contribution.fromFirebase(firebaseMap: value);
 
+        _allContributions.add(contribution);
+
+        ///Check if this contribution related to current user
         if (contribution.user_child_id == _userProvider.user.child_id) {
           contribution.distanceToCurrentLocation =
               _getDistanceToCurrentLocation(
@@ -172,6 +182,17 @@ class ContributionBloc extends BLoC<ContributionEvent> {
             2;
 
     return 12742 * asin(sqrt(a));
+  }
+
+  void _getContributionByLocation(double latitude, double longitude) {
+    Contribution contribution = _allContributions.firstWhere((contribution) {
+      return contribution.latitude == latitude &&
+          contribution.longitude == longitude;
+    });
+    MainRouter.navigator
+        .pushNamed(MainRouter.contributionDetailsPage, arguments: {
+      'result': {'contribution': contribution}
+    });
   }
 
   void dispose() {
