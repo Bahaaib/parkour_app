@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parkour_app/bloc/auth/auth_bloc.dart';
@@ -13,10 +15,11 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
+  StreamSubscription _streamSubscription;
 
   @override
   void initState() {
-    _authBloc.authSubject.listen((receivedState) {
+    _streamSubscription = _authBloc.authSubject.listen((receivedState) {
       if (receivedState is CurrentUserIs) {
         if (receivedState.user != null) {
           _authBloc.dispatch(UserDataByCachedIdRequested());
@@ -58,5 +61,11 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription.cancel();
+    super.dispose();
   }
 }

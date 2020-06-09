@@ -13,11 +13,14 @@ Contribution _$ContributionFromJson(Map<String, dynamic> json) {
     json['title'] as String,
     json['description'] as String,
     json['address'] as String,
-    (json['images'] as List)?.map((e) => e as String)?.toList(),
+    json['images'] as List,
     (json['latitude'] as num)?.toDouble(),
     (json['longitude'] as num)?.toDouble(),
     json['submission_date'] as String,
-  )..imagesMap = json['imagesMap'] as Map<String, dynamic>;
+  )
+    ..imagesMap = json['imagesMap'] as Map<String, dynamic>
+    ..distanceToCurrentLocation =
+        (json['distanceToCurrentLocation'] as num)?.toDouble();
 }
 
 Map<String, dynamic> _$ContributionToJson(Contribution instance) =>
@@ -32,4 +35,5 @@ Map<String, dynamic> _$ContributionToJson(Contribution instance) =>
       'latitude': instance.latitude,
       'longitude': instance.longitude,
       'submission_date': instance.submission_date,
+      'distanceToCurrentLocation': instance.distanceToCurrentLocation,
     };

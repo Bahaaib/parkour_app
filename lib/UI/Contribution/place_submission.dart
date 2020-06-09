@@ -6,8 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:parkour_app/bloc/auth/auth_bloc.dart';
+import 'package:parkour_app/bloc/auth/auth_event.dart';
 import 'package:parkour_app/bloc/contribution/bloc.dart';
 import 'package:parkour_app/provider/location_provider.dart';
+import 'package:parkour_app/provider/user_provider.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -24,7 +27,6 @@ class PlaceSubmissionPage extends StatefulWidget {
 class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
   final ContributionBloc _contributionBloc = GetIt.instance<ContributionBloc>();
   final GlobalKey<FormState> _infoFormKey = GlobalKey();
-  final FocusNode _titleFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
   final FocusNode _addressFocusNode = FocusNode();
 
@@ -32,10 +34,16 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
   StreamSubscription _streamSubscription;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _controller = Completer();
+  final UserProvider _userProvider = GetIt.instance<UserProvider>();
+  final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
   final LocationProvider _locationProvider = GetIt.instance<LocationProvider>();
   Map<MarkerId, Marker> markers = Map<MarkerId, Marker>();
   double _latitude;
   double _longitude;
+
+  String _title;
+  String _address;
+  String _description;
 
   //Default initial Position [Center of Germany]
   CameraPosition _currentPosition =
@@ -50,6 +58,7 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
             .pushNamedAndRemoveUntil(MainRouter.confirmationPage, (_) => false);
       }
     });
+    _authBloc.dispatch(UserDataByCachedIdRequested());
     super.initState();
   }
 
@@ -71,14 +80,21 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
               onPressed: () {
                 if (_infoFormKey.currentState.validate()) {
                   if (_isLocationPicked()) {
-                    ///TODO: Submit
-                    _contributionBloc.dispatch(RequestSubmissionRequested(
-                        title: 'title',
-                        description: 'desc',
-                        address: 'address',
-                        imageList: _imageList,
-                        latitude: _latitude,
-                        longitude: _longitude));
+                    if (_userProvider.user.username != null &&
+                        _userProvider.user.username.isNotEmpty) {
+                      ///TODO: Submit
+                      _contributionBloc.dispatch(RequestSubmissionRequested(
+                          title: _title,
+                          description: _description,
+                          address: _address,
+                          imageList: _imageList,
+                          latitude: _latitude,
+                          longitude: _longitude));
+                    } else {
+                      _showSnackBar(
+                          'Please complete your profile before contribution',
+                          CodeStrings.typeError);
+                    }
                   } else {
                     _showSnackBar('Parcour location MUST be picked on map',
                         CodeStrings.typeError);
@@ -154,7 +170,19 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
 
           return null;
         },
-        onChanged: (value) {},
+        onChanged: (value) {
+          switch (tag) {
+            case CodeStrings.titleTag:
+              _title = value;
+              break;
+            case CodeStrings.descriptionTag:
+              _description = value;
+              break;
+            case CodeStrings.addressTag:
+              _address = value;
+              break;
+          }
+        },
         onFieldSubmitted: (_) =>
             FocusScope.of(context).requestFocus(destinationNode),
       ),
@@ -311,14 +339,21 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
         onPressed: () {
           if (_infoFormKey.currentState.validate()) {
             if (_isLocationPicked()) {
-              ///TODO: Submit
-              _contributionBloc.dispatch(RequestSubmissionRequested(
-                  title: 'title',
-                  description: 'desc',
-                  address: 'address',
-                  imageList: _imageList,
-                  latitude: _latitude,
-                  longitude: _longitude));
+              if (_userProvider.user.username != null &&
+                  _userProvider.user.username.isNotEmpty) {
+                ///TODO: Submit
+                _contributionBloc.dispatch(RequestSubmissionRequested(
+                    title: _title,
+                    description: _description,
+                    address: _address,
+                    imageList: _imageList,
+                    latitude: _latitude,
+                    longitude: _longitude));
+              } else {
+                _showSnackBar(
+                    'Please complete your profile before contribution',
+                    CodeStrings.typeError);
+              }
             } else {
               _showSnackBar('Parcour location MUST be picked on map',
                   CodeStrings.typeError);

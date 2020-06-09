@@ -23,6 +23,8 @@ class RequestSubmissionRequested extends ContributionEvent {
 
 class ContributionsRequested extends ContributionEvent {}
 
+class ContributionsRequestedForMap extends ContributionEvent {}
+
 class ContributionSelected extends ContributionEvent {
   final double latitude;
   final double longitude;

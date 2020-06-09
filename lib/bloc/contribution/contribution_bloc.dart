@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:load/load.dart';
 import 'package:parkour_app/PODO/Contribution.dart';
+import 'package:parkour_app/PODO/Contributor.dart';
 import 'package:parkour_app/bloc/bloc.dart';
 import 'package:parkour_app/bloc/contribution/bloc.dart';
 import 'package:parkour_app/provider/location_provider.dart';
@@ -29,6 +30,8 @@ class ContributionBloc extends BLoC<ContributionEvent> {
   final List<Contribution> _allContributions = List<Contribution>();
   double currentLatitude;
   double currentLongitude;
+  Contributor _contributor;
+  Contribution _contribution;
 
   @override
   void dispatch(ContributionEvent event) async {
@@ -43,6 +46,10 @@ class ContributionBloc extends BLoC<ContributionEvent> {
     }
 
     if (event is ContributionsRequested) {
+      await _getUserContributions();
+    }
+
+    if (event is ContributionsRequestedForMap) {
       await _getAllContributions();
     }
 
@@ -77,6 +84,7 @@ class ContributionBloc extends BLoC<ContributionEvent> {
   }
 
   Future<void> _uploadImages(List<File> images) async {
+    _imagesUrlList.clear();
     final String storagePath = 'requests/ ${_userProvider.user.child_id}/';
 
     for (File image in images) {
@@ -114,7 +122,7 @@ class ContributionBloc extends BLoC<ContributionEvent> {
     DatabaseReference ref = FirebaseDatabase.instance
         .reference()
         .child(CodeStrings.databaseDevInstance)
-        .child(CodeStrings.contributionsDatabaseRef)
+        .child(CodeStrings.requestsDatabaseRef)
         .push();
     await ref.set({
       'user_child_id': _userProvider.user.child_id,
@@ -131,7 +139,7 @@ class ContributionBloc extends BLoC<ContributionEvent> {
     hideLoadingDialog();
   }
 
-  Future<void> _getAllContributions() async {
+  Future<void> _getUserContributions() async {
     await _getCurrentLocation();
     Map<dynamic, dynamic> children = {};
     List<Contribution> contributions = [];
@@ -148,8 +156,6 @@ class ContributionBloc extends BLoC<ContributionEvent> {
         Contribution contribution =
             Contribution.fromFirebase(firebaseMap: value);
 
-        _allContributions.add(contribution);
-
         ///Check if this contribution related to current user
         if (contribution.user_child_id == _userProvider.user.child_id) {
           contribution.distanceToCurrentLocation =
@@ -162,6 +168,33 @@ class ContributionBloc extends BLoC<ContributionEvent> {
         }
       });
       contributionSubject.add(ContributionsAreFetched(contributions));
+    });
+  }
+
+  Future<void> _getAllContributions() async {
+    await _getCurrentLocation();
+    Map<dynamic, dynamic> children = {};
+    _allContributions.clear();
+    DatabaseReference ref = FirebaseDatabase.instance.reference();
+
+    ref
+        .child(CodeStrings.databaseDevInstance)
+        .child(CodeStrings.contributionsDatabaseRef)
+        .once()
+        .then((DataSnapshot datasnapshot) {
+      children = datasnapshot.value;
+      children.forEach((key, value) async {
+        Contribution contribution =
+            Contribution.fromFirebase(firebaseMap: value);
+
+        contribution.distanceToCurrentLocation = _getDistanceToCurrentLocation(
+            contribution.latitude, contribution.longitude);
+
+        print(
+            '============> DIST: ${_getDistanceToCurrentLocation(contribution.latitude, contribution.longitude)}');
+        _allContributions.add(contribution);
+      });
+      contributionSubject.add(ContributionsAreFetched(_allContributions));
     });
   }
 
@@ -184,14 +217,36 @@ class ContributionBloc extends BLoC<ContributionEvent> {
     return 12742 * asin(sqrt(a));
   }
 
-  void _getContributionByLocation(double latitude, double longitude) {
-    Contribution contribution = _allContributions.firstWhere((contribution) {
+  Future<void> _getContributionByLocation(
+      double latitude, double longitude) async {
+    _contribution = _allContributions.firstWhere((contribution) {
       return contribution.latitude == latitude &&
           contribution.longitude == longitude;
     });
-    MainRouter.navigator
-        .pushNamed(MainRouter.contributionDetailsPage, arguments: {
-      'result': {'contribution': contribution}
+    _getContributorByChildId(_contribution.user_child_id);
+  }
+
+  Future<void> _getContributorByChildId(String childId) async {
+    Map<dynamic, dynamic> value = {};
+    DatabaseReference databaseReference = FirebaseDatabase.instance.reference();
+
+    databaseReference
+        .child(CodeStrings.databaseDevInstance)
+        .child(CodeStrings.usersDatabaseRef)
+        .child(childId)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      value = dataSnapshot.value;
+
+      _contributor = Contributor.fromFirebase(firebaseMap: value);
+      MainRouter.navigator
+          .pushNamed(MainRouter.contributionDetailsPage, arguments: {
+        'result': {
+          'contribution': _contribution,
+          'contributor': _contributor,
+          'from': 'map'
+        }
+      });
     });
   }
 

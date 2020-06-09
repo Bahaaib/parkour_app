@@ -18,6 +18,7 @@ import 'package:parkour_app/UI/Contribution/place_submission.dart';
 import 'package:parkour_app/UI/Contribution/confirmation_page.dart';
 import 'package:parkour_app/UI/Contribution/contributions_page.dart';
 import 'package:parkour_app/UI/Contribution/Contribution_details_page.dart';
+import 'package:parkour_app/UI/Contribution/contributor_details_page.dart';
 import 'package:parkour_app/UI/temp_page.dart';
 
 class MainRouter {
@@ -32,6 +33,7 @@ class MainRouter {
   static const confirmationPage = '/confirmation-page';
   static const contributionsPage = '/contributions-page';
   static const contributionDetailsPage = '/contribution-details-page';
+  static const contributorDetailsPage = '/contributor-details-page';
   static const tempPage = '/temp-page';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<MainRouter>();
@@ -93,6 +95,11 @@ class MainRouter {
       case MainRouter.contributionDetailsPage:
         return MaterialPageRoute(
           builder: (_) => ContributionDetailsPage(),
+          settings: settings,
+        );
+      case MainRouter.contributorDetailsPage:
+        return MaterialPageRoute(
+          builder: (_) => ContributorDetailsPage(),
           settings: settings,
         );
       case MainRouter.tempPage:

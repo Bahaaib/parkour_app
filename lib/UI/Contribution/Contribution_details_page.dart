@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:parkour_app/PODO/Contribution.dart';
+import 'package:parkour_app/PODO/Contributor.dart';
+import 'package:parkour_app/provider/user_provider.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
+import 'package:parkour_app/support/router.gr.dart';
 
 class ContributionDetailsPage extends StatefulWidget {
   @override
@@ -10,7 +14,11 @@ class ContributionDetailsPage extends StatefulWidget {
 }
 
 class _ContributionDetailsPageState extends State<ContributionDetailsPage> {
+  final UserProvider _userProvider = GetIt.instance<UserProvider>();
   Contribution _contribution;
+  String _from = 'list';
+  Contributor _contributor;
+  bool _isMyContribution = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +44,8 @@ class _ContributionDetailsPageState extends State<ContributionDetailsPage> {
             _contribution.images != null
                 ? _buildTextLabel(AppStrings.galleryLabel, topMargin: 30.0)
                 : Container(),
-            _buildImagesGallery()
+            _buildImagesGallery(),
+            _contributor != null ? _buildContributorSections() : Container()
           ],
         ),
       ),
@@ -46,7 +55,7 @@ class _ContributionDetailsPageState extends State<ContributionDetailsPage> {
   Widget _buildImagesGallery() {
     return _contribution.images != null
         ? Container(
-            height: 400.0,
+            height: (_contribution.images.length / 2).round() * 120.0,
             margin: EdgeInsetsDirectional.only(
                 start: 20, end: 20, top: 20.0, bottom: 20.0),
             child: GridView.builder(
@@ -95,14 +104,48 @@ class _ContributionDetailsPageState extends State<ContributionDetailsPage> {
     );
   }
 
+  Widget _buildContributorSections() {
+    return InkWell(
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20.0),
+        child: Row(
+          children: <Widget>[
+            _buildTextLabel('Contributed by: ${_getContributorName()}',
+                textColor: AppColors.primaryColor),
+          ],
+        ),
+      ),
+      onTap: () {
+        if (_isMyContribution) {
+          MainRouter.navigator.pushNamed(MainRouter.profilePage);
+        } else {
+          MainRouter.navigator.pushNamed(MainRouter.contributorDetailsPage,
+              arguments: {'contributor': _contributor});
+        }
+      },
+    );
+  }
+
+  String _getContributorName() {
+    if (_contributor.child_id == _userProvider.user.child_id) {
+      _isMyContribution = true;
+      return 'You';
+    } else {
+      _isMyContribution = false;
+      return _contributor.username;
+    }
+  }
+
   void _checkPassedArguments() {
-    Map<String, Contribution> result;
+    Map<String, dynamic> result;
     final args = ModalRoute.of(context).settings.arguments
-        as Map<String, Map<String, Contribution>>;
+        as Map<String, Map<String, dynamic>>;
     if (args != null) {
       setState(() {
         result = args['result'];
         _contribution = result['contribution'];
+        _from = result['from'];
+        _contributor = result['contributor'];
       });
     }
   }

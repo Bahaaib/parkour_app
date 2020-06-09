@@ -7,6 +7,7 @@ import 'package:parkour_app/bloc/bloc.dart';
 import 'package:parkour_app/bloc/profile/bloc.dart';
 import 'package:parkour_app/provider/user_provider.dart';
 import 'package:parkour_app/resources/strings.dart';
+import 'package:parkour_app/support/router.gr.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ProfileBloc extends BLoC<ProfileEvent> {
@@ -32,6 +33,8 @@ class ProfileBloc extends BLoC<ProfileEvent> {
         .update(data)
         .then((_) {
       hideLoadingDialog();
+      MainRouter.navigator
+          .pushNamedAndRemoveUntil(MainRouter.homePage, (route) => false);
     }).catchError((_) {
       hideLoadingDialog();
     });

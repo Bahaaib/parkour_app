@@ -56,7 +56,7 @@ class AppStrings {
       'facebookHint': 'Type your Facebook URL',
       'twitterHint': 'Type your Twitter URL',
       'saveButtonLabel': 'SAVE',
-      'addPlaceText': 'Submit a new place',
+      'addPlaceText': 'Submit a new parkour',
       'titleHint': 'Type the place title',
       'descHint': 'Type general info about the place',
       'placeAddressHint': 'Type the place address (Street, Zip code,..etc)',
@@ -316,7 +316,7 @@ class CodeStrings {
   static const String typeError = 'error';
   static const String twitterTag = 'twitter_url';
   static const String facebookTag = 'facebook_url';
-  static const String whatsappTag = 'Type your What\'s App Number';
+  static const String whatsappTag = 'whatsapp_number';
   static const String addressTag = 'address';
   static const String usernameTag = 'username';
   static const String titleTag = 'title';

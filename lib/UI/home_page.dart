@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
     print('PLAYING POSITION: ${_currentPosition.target.latitude}');
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_currentPosition));
-    _contributionsBloc.dispatch(ContributionsRequested());
+    _contributionsBloc.dispatch(ContributionsRequestedForMap());
   }
 
   void _checkPassedArguments() {
@@ -150,6 +150,7 @@ class _HomePageState extends State<HomePage> {
         ),
         icon: BitmapDescriptor.defaultMarker,
         onTap: (){
+          print('MARKER PRESSED');
           //TODO: Open Details page for that marker position
           _contributionsBloc.dispatch(ContributionSelected(latlng.latitude, latlng.longitude));
         }
