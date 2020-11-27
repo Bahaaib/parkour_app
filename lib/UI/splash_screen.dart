@@ -7,6 +7,8 @@ import 'package:parkour_app/bloc/auth/bloc.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
 import 'package:parkour_app/support/router.gr.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -34,6 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
             .pushNamedAndRemoveUntil(MainRouter.homePage, (_) => false);
       }
     });
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
     super.initState();
   }
 

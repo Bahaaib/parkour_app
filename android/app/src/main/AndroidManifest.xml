@@ -14,6 +14,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAtuQ9DbGTfz81j288BkUGRsNxrKu7zSuo" />
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2024573052777294~6395418851"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

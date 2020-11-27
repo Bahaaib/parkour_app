@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:parkour_app/bloc/auth/auth_bloc.dart';
 import 'package:parkour_app/bloc/auth/auth_event.dart';
 import 'package:parkour_app/bloc/contribution/bloc.dart';
+import 'package:parkour_app/provider/admob_provider.dart';
 import 'package:parkour_app/provider/location_provider.dart';
 import 'package:parkour_app/provider/user_provider.dart';
 import 'package:parkour_app/resources/colors.dart';
@@ -35,6 +36,7 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _controller = Completer();
   final UserProvider _userProvider = GetIt.instance<UserProvider>();
+  final AdmobProvider _admobProvider = GetIt.instance<AdmobProvider>();
   final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
   final LocationProvider _locationProvider = GetIt.instance<LocationProvider>();
   Map<MarkerId, Marker> markers = Map<MarkerId, Marker>();
@@ -51,6 +53,9 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _admobProvider.setAdTargetingInfo(['sports', 'archery', 'hiking']);
+    });
     _streamSubscription =
         _contributionBloc.contributionSubject.listen((receivedState) {
       if (receivedState is ContributionIsSubmitted) {
@@ -59,6 +64,7 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
       }
     });
     _authBloc.dispatch(UserDataByCachedIdRequested());
+    _admobProvider.loadAndShowBannerAd1();
     super.initState();
   }
 
@@ -326,7 +332,7 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
       height: 70.0,
       padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
       margin:
-          EdgeInsetsDirectional.only(start: 20, end: 20, top: 30, bottom: 10),
+          EdgeInsetsDirectional.only(start: 20, end: 20, top: 30, bottom: 50),
       child: RaisedButton(
         color: AppColors.primaryColor,
         child: Text(
@@ -429,6 +435,7 @@ class _PlaceSubmissionPageState extends State<PlaceSubmissionPage> {
   @override
   void dispose() {
     _streamSubscription.cancel();
+    _admobProvider.dispose();
     super.dispose();
   }
 }

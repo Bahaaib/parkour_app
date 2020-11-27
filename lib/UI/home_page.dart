@@ -141,20 +141,20 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       final MarkerId markerId = MarkerId(DateTime.now().toIso8601String());
       Marker marker = Marker(
-        markerId: markerId,
-        draggable: false,
-        position: latlng,
-        //With this parameter you automatically obtain latitude and longitude
-        infoWindow: InfoWindow(
-          title: title,
-        ),
-        icon: BitmapDescriptor.defaultMarker,
-        onTap: (){
-          print('MARKER PRESSED');
-          //TODO: Open Details page for that marker position
-          _contributionsBloc.dispatch(ContributionSelected(latlng.latitude, latlng.longitude));
-        }
-      );
+          markerId: markerId,
+          draggable: false,
+          position: latlng,
+          //With this parameter you automatically obtain latitude and longitude
+          infoWindow: InfoWindow(
+            title: title,
+          ),
+          icon: BitmapDescriptor.defaultMarker,
+          onTap: () {
+            print('MARKER PRESSED');
+            //TODO: Open Details page for that marker position
+            _contributionsBloc.dispatch(
+                ContributionSelected(latlng.latitude, latlng.longitude));
+          });
 
       markers[markerId] = marker;
     });

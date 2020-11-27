@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:parkour_app/bloc/profile/bloc.dart';
+import 'package:parkour_app/provider/admob_provider.dart';
 import 'package:parkour_app/provider/user_provider.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
@@ -16,6 +17,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final GlobalKey<FormState> _socialAccountsFormKey = GlobalKey();
   final FocusNode _addressFocusNode = FocusNode();
   final UserProvider _userProvider = GetIt.instance<UserProvider>();
+  final AdmobProvider _admobProvider = GetIt.instance<AdmobProvider>();
+
 
   final List<TextEditingController> _controllers =
       List<TextEditingController>.generate(
@@ -25,6 +28,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _admobProvider.setAdTargetingInfo(['sports', 'archery', 'hiking']);
+    });
     _setInitialValues();
     _userData = {
       'username': _controllers[0].text,
@@ -33,6 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
       'facebook_url': _controllers[3].text,
       'twitter_url': _controllers[4].text,
     };
+    _admobProvider.loadAndShowBannerAd1();
     super.initState();
   }
 
@@ -204,7 +211,7 @@ class _ProfilePageState extends State<ProfilePage> {
       height: 70.0,
       padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
       margin:
-          EdgeInsetsDirectional.only(start: 20, end: 20, top: 30, bottom: 10),
+          EdgeInsetsDirectional.only(start: 20, end: 20, top: 30, bottom: 50),
       child: RaisedButton(
         color: AppColors.primaryColor,
         child: Text(
@@ -235,5 +242,11 @@ class _ProfilePageState extends State<ProfilePage> {
             fontSize: fontSize, fontWeight: FontWeight.bold, color: textColor),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _admobProvider.dispose();
+    super.dispose();
   }
 }

@@ -323,4 +323,7 @@ class CodeStrings {
   static const String descriptionTag = 'description';
   static const String oldPasswordTag = 'old';
   static const String newPasswordTag = 'new';
+  static const String admobAppId = 'ca-app-pub-2024573052777294 ~ 6395418851';
+  static const String admobBanner1 = 'ca-app-pub-2024573052777294/8830010506';
+  static const String admobBanner2 = 'ca-app-pub-2024573052777294/1115172016';
 }

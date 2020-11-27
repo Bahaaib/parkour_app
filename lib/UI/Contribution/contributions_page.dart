@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:parkour_app/PODO/Contribution.dart';
 import 'package:parkour_app/bloc/contribution/bloc.dart';
 import 'package:parkour_app/bloc/contribution/contribution_bloc.dart';
+import 'package:parkour_app/provider/admob_provider.dart';
 import 'package:parkour_app/resources/colors.dart';
 import 'package:parkour_app/resources/strings.dart';
 import 'package:parkour_app/support/router.gr.dart';
@@ -20,10 +21,16 @@ class _ContributionsPageState extends State<ContributionsPage> {
       GetIt.instance<ContributionBloc>();
   final List<Contribution> _contributions = List<Contribution>();
   StreamSubscription _streamSubscription;
+  final AdmobProvider _admobProvider = GetIt.instance<AdmobProvider>();
 
   @override
   void initState() {
-   _streamSubscription =  _contributionsBloc.contributionSubject.listen((receivedState) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _admobProvider.setAdTargetingInfo(['sports', 'archery', 'hiking']);
+    });
+
+    _streamSubscription =
+        _contributionsBloc.contributionSubject.listen((receivedState) {
       if (receivedState is ContributionsAreFetched) {
         setState(() {
           _contributions.clear();
@@ -32,6 +39,8 @@ class _ContributionsPageState extends State<ContributionsPage> {
       }
     });
     _contributionsBloc.dispatch(ContributionsRequested());
+    _admobProvider.loadAndShowBannerAd1();
+    _admobProvider.loadAndShowBannerAd2(anchorOffset: 80.0);
     super.initState();
   }
 
@@ -49,7 +58,7 @@ class _ContributionsPageState extends State<ContributionsPage> {
           Expanded(
             child: _contributions.isNotEmpty
                 ? Container(
-                    margin: EdgeInsets.only(top: 10.0),
+                    margin: EdgeInsets.only(top: 50.0, bottom: 50.0),
                     child: ListView.builder(
                       itemCount: _contributions.length,
                       itemBuilder: (BuildContext context, int position) =>
@@ -116,7 +125,8 @@ class _ContributionsPageState extends State<ContributionsPage> {
 
   @override
   void dispose() {
-   _streamSubscription.cancel();
+    _streamSubscription.cancel();
+    _admobProvider.dispose();
     super.dispose();
   }
 }
